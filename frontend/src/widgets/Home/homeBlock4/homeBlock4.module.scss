@@ -1,0 +1,42 @@
+.block4{
+    margin-top: 120px;
+    display: grid;
+    grid-template-columns: 8fr 4fr; /* соотношение 1:15 */
+    gap: 15px; /* расстояние между колонками, можно убрать */
+
+  section{
+    .drob{
+        display: grid;
+        grid-template-columns: 6fr 6fr; /* соотношение 1:15 */
+        gap: 15px; 
+        
+        .blockInfoMod{
+            background-color: #000A0D;
+        }
+    }
+    div{
+        margin-top: 10px;
+    }
+    .blockInfo{
+        background-color: #000A0D;
+
+        .splite{
+            display: flex;
+
+            
+        }
+    }
+  }
+}
+h1{
+    font-size: 36px;
+}
+b{
+    color: var(--action-color);
+}
+button{
+    margin-top: 15px;
+}
+.spliteItem{
+                padding: 20px;
+            }

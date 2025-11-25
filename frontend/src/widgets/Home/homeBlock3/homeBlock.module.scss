@@ -1,0 +1,25 @@
+.block3{
+    margin-top: 120px;
+    display: flex;
+
+    .author{
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
+        .desc{
+            margin-top: -60px;
+        }
+        h1{
+            font-size: 55px;
+        }
+        *{
+            width: 100%;
+        }
+        button{
+            width: max-content;
+            margin-top: -20px;
+        }
+    }
+
+}

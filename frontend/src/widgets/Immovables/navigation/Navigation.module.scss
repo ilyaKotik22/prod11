@@ -1,0 +1,185 @@
+// Navigation.module.scss
+.navigation {
+  
+
+  color: white;
+  min-height: 300px;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 42px;
+  font-weight: 600;
+  text-align: left;
+  margin-bottom: 50px;
+  color: #6ee4e2;
+  letter-spacing: 1px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(110, 228, 226, 0.2);
+
+  /* Прижато к левому краю */
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.trigger {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 180px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(110, 228, 226, 0.25);
+    transform: translateY(-2px);
+  }
+
+  .arrow {
+    font-size: 12px;
+    transition: transform 0.3s;
+  }
+}
+
+.dropdown:hover .arrow,
+.dropdown:focus-within .arrow {
+  transform: rotate(180deg);
+}
+
+/* Обычные выпадающие меню */
+.menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 100%;
+  background: #1a1a1c;
+  border: 1px solid rgba(110, 228, 226, 0.3);
+  border-radius: 12px;
+  margin-top: 8px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  z-index: 100;
+  animation: fadeIn 0.25s ease-out;
+
+  li {
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #6ee4e2;
+      color: #0e0e10;
+      font-weight: 600;
+    }
+  }
+}
+
+/* Сложное меню "Тип недвижимости" */
+.complexMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: flex;
+  gap: 32px;
+  padding: 20px;
+  background: #1a1a1c;
+  border: 1px solid rgba(110, 228, 226, 0.3);
+  border-radius: 12px;
+  margin-top: 8px;
+  min-width: 460px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  z-index: 100;
+  animation: fadeIn 0.25s ease-out;
+
+  .group {
+    h4 {
+      margin: 0 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(110, 228, 226, 0.3);
+      color: #6ee4e2;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      padding: 10px 0;
+      cursor: pointer;
+      border-radius: 6px;
+      padding-left: 8px;
+      transition: all 0.2s;
+
+      &:hover {
+        background: rgba(110, 228, 226, 0.2);
+        color: #6ee4e2;
+        padding-left: 12px;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Адаптив — на мобильных всё в столбик, но всё равно слева */
+@media (max-width: 968px) {
+  .title {
+    text-align: center;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
+
+  .trigger {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .complexMenu {
+    position: fixed;
+    left: 50% !important;
+    transform: translateX(-50%);
+    width: 90vw;
+    max-width: 460px;
+  }
+}

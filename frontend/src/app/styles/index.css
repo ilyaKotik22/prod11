@@ -1,0 +1,50 @@
+:root{
+  --body-color: #0A1616;
+  --item-color: #000A0D;
+  --item-anotherColor: #0C1C1C;
+  --action-color: #64FAF9;
+  
+  --border-items: 10px;
+}
+
+body{
+  font-size: 16px;
+  color: white;
+  background-color: var(--body-color);
+  font-family: 'Montserrat', Arial, sans-serif;
+  
+}
+
+.container{
+  margin: 0 6vw;
+}
+@font-face {
+  font-family: "Bank_Gothic_Medium";
+  src: url("./fonts/Bank_Gothic_Medium.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Montserrat-Regular";
+  src: url("./fonts/Montserrat-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+h1{
+  font-family: 'Bank_Gothic_Medium', sans-serif;
+}
+
+@media (max-width: 1100px) {
+    .container{
+      margin: 0 10px;
+    }
+}
+button{
+  background-color: var(--action-color);
+  padding: 15px 45px;
+  color: black;
+  font-size: 12px;
+  font-weight: bold;
+}
