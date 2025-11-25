@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import style from './Header.module.scss'
-import logo from '../../../public/BezfonaLogo.svg'
+import logo from '../../../public/Bez44ona3.png'
 import watsLogo from '../../../public/whatsappLogo.svg'
 import telegLogo from '../../../public/telegramLogo.svg'
 import HeaderCallPopup from './HeaderPoupup/HeaderPopup';
@@ -17,7 +17,7 @@ export const Header: React.FC = () => {
                         <a href="/">
                             <img src={logo} alt="logo" />
                         </a>
-                        <a href="/new-building-apartments">Новостроки</a>
+                        <a href="/new-building-complexes">Новостроки</a>
                         <a href="/ready-apartments">Готовые кварирвы</a>
                         <a href="/rental-apartments">Арендаквартир</a>
                         <a href="/country-properties">Загородная</a>
@@ -33,7 +33,7 @@ export const Header: React.FC = () => {
                         <a href="">
                             <img src={telegLogo} alt="" />
                         </a>
-                        <a href="">+7 (495) 255-01-61</a>
+                        <a href="">+7 (960) 077-81-11 </a>
                         <button onClick={() => setPopupOpen(true)}>продать квартиру</button>
                     </nav>
                 </section>

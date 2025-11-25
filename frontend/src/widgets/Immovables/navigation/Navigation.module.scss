@@ -1,13 +1,12 @@
 // Navigation.module.scss
 .navigation {
-  
-
+  padding: 120px 20px 60px;
+ 
   color: white;
-  min-height: 300px;
+  min-height: 400px;
 }
 
 .container {
-  padding-top: 120px;
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -19,6 +18,11 @@
   margin-bottom: 50px;
   color: #6ee4e2;
   letter-spacing: 1px;
+
+  @media (max-width: 968px) {
+    text-align: center;
+    font-size: 36px;
+  }
 }
 
 .filters {
@@ -28,14 +32,19 @@
   
  
   border-radius: 16px;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
 
-
-  /* Прижато к левому краю */
   justify-content: flex-start;
   align-items: center;
+
+  @media (max-width: 968px) {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+  }
 }
 
+// === Кнопка-триггер ===
 .dropdown {
   position: relative;
 }
@@ -51,79 +60,90 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-width: 180px;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 190px;
+  width: 100%;
+  text-align: left;
   transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
 
   &:hover {
     background: rgba(110, 228, 226, 0.25);
     transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(110, 228, 226, 0.15);
   }
 
   .arrow {
     font-size: 12px;
-    transition: transform 0.3s;
+    transition: transform 0.3s ease;
+    margin-left: auto;
   }
 }
 
+// Поворот стрелки при открытии
 .dropdown:hover .arrow,
 .dropdown:focus-within .arrow {
   transform: rotate(180deg);
 }
 
-/* Обычные выпадающие меню */
+// === Обычные выпадающие меню ===
 .menu {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 8px);
   left: 0;
-  min-width: 100%;
+  right: 0;
   background: #1a1a1c;
   border: 1px solid rgba(110, 228, 226, 0.3);
   border-radius: 12px;
-  margin-top: 8px;
   overflow: hidden;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-  z-index: 100;
+  z-index: 1000;
   animation: fadeIn 0.25s ease-out;
 
   li {
     padding: 14px 20px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.25s ease;
+    color: white;
 
     &:hover {
       background: #6ee4e2;
       color: #0e0e10;
       font-weight: 600;
     }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(110, 228, 226, 0.1);
+    }
   }
 }
 
-/* Сложное меню "Тип недвижимости" */
+// === Сложное меню "Тип недвижимости" ===
 .complexMenu {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 8px);
   left: 0;
   display: flex;
-  gap: 32px;
-  padding: 20px;
+  gap: 36px;
+  padding: 24px;
   background: #1a1a1c;
   border: 1px solid rgba(110, 228, 226, 0.3);
-  border-radius: 12px;
-  margin-top: 8px;
-  min-width: 460px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-  z-index: 100;
-  animation: fadeIn 0.25s ease-out;
+  border-radius: 16px;
+  min-width: 480px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
 
   .group {
     h4 {
-      margin: 0 0 12px;
-      padding-bottom: 8px;
-      
+      margin: 0 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(110, 228, 226, 0.3);
       color: #6ee4e2;
       font-size: 15px;
       font-weight: 600;
+      letter-spacing: 0.5px;
     }
 
     ul {
@@ -133,25 +153,41 @@
     }
 
     li {
-      padding: 10px 0;
+      padding: 11px 8px;
       cursor: pointer;
-      border-radius: 6px;
-      padding-left: 8px;
-      transition: all 0.2s;
+      border-radius: 8px;
+      transition: all 0.25s ease;
+      color: #e0e0e0;
 
       &:hover {
         background: rgba(110, 228, 226, 0.2);
         color: #6ee4e2;
-        padding-left: 12px;
+        padding-left: 14px;
+        font-weight: 500;
       }
     }
   }
+
+  // Мобильная версия — центрируем
+  @media (max-width: 968px) {
+    position: fixed;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90vw;
+    max-width: 480px;
+    max-height: 80vh;
+    overflow-y: auto;
+    flex-direction: column;
+    gap: 24px;
+  }
 }
 
+// Анимация появления
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-12px);
   }
   to {
     opacity: 1;
@@ -159,28 +195,25 @@
   }
 }
 
-/* Адаптив — на мобильных всё в столбик, но всё равно слева */
+// === Мобильные улучшения ===
 @media (max-width: 968px) {
-  .title {
-    text-align: center;
-  }
-
-  .filters {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 16px;
-  }
-
   .trigger {
-    width: 100%;
-    justify-content: space-between;
+    min-width: unset;
+    font-size: 17px;
+    padding: 16px 20px;
   }
 
+  .menu,
   .complexMenu {
     position: fixed;
     left: 50% !important;
     transform: translateX(-50%);
     width: 90vw;
-    max-width: 460px;
+    max-width: 400px;
+  }
+
+  .menu {
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
   }
 }

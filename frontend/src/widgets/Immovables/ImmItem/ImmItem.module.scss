@@ -1,38 +1,110 @@
-li{
-    border-radius: 10px;
-    color: black;
-    max-width:30%;
-    background-color: #fff;
+// ImmItem.module.scss
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 
-    div{
-        padding: 0 15px;
-    }
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.15);
+  }
 
-    .head{
-        font-size: 24px;
-    }
-    .address{
-        margin-top: 10px;
-        color: gray;
-    }
+  a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
 }
-.met{
-    display: flex;
-}
-.allInf{
-    padding-bottom: 20px;
-    margin-top: 10px;
-    display: flex;
-}
-.ccost{
-    width: 10%;
-    display: flex;
-    font-size: 14px;
-    gap: 10px;
-    *{
-        padding: 0;
-    }
-    .sect{
 
-    }
+.image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.content {
+  padding: 16px;
+}
+
+.head {
+  font-size: 22px;
+  font-weight: 600;
+  color: #0e0e10;
+  margin: 0 0 6px;
+  line-height: 1.3;
+}
+
+.address {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &::before {
+    content: "Location";
+    font-size: 15px;
+  }
+}
+
+.metro {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 14px;
+
+  img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 14px;
+  border-top: 1px solid #eee;
+}
+
+.price {
+  font-size: 19px;
+  font-weight: 700;
+  color: #0e0e10;
+}
+
+.params {
+  display: flex;
+  gap: 18px;
+  font-size: 13px;
+  color: #555;
+}
+
+.param {
+  text-align: center;
+  min-width: 48px;
+
+  p {
+    margin: 0 0 4px;
+    color: #999;
+    font-weight: 500;
+  }
+
+  span {
+    font-weight: 600;
+    color: #0e0e10;
+  }
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+  .params {
+    gap: 12px;
+    font-size: 12px;
+  }
 }

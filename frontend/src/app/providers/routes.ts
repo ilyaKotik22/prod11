@@ -6,6 +6,8 @@ import { DevelPage } from "../../pages/developments/DevelopmentsPage"
 import { HomePage } from "../../pages/home/HomePage"
 import { ImmovablesPage } from "../../pages/immovables/ImmovablesPage"
 import { ItemPage } from "../../pages/itemPage/ItemPage"
+import { NBCitemPage } from "../../pages/NBC/NBCitemePage"
+import { NewBuild } from "../../pages/new-building-complexes/new-building-complexes"
 import { Rental } from "../../pages/rental/Rental"
 
 
@@ -37,6 +39,14 @@ export const MyRoutes = [
     {
         url: '/rental-apartments/:id',
         component: ItemPage   
+    },
+    {
+        url: '/new-building-complexes',
+        component: NewBuild
+    },
+    {
+        url: '/new-building-complexes/:id',
+        component: NBCitemPage
     },
     {
         url: '/new-building-apartments',
