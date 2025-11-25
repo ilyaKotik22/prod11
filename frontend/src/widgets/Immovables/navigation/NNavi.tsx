@@ -42,9 +42,9 @@ if (realtyType ) params.set('type', realtyType);
 // Купить/Снять
 if (buyType ) params.set('action', buyType);
 
-console.log(`http://localhost:4000/${lastPart}/?${params.toString()}`)
+console.log(`${import.meta.env.BASE_URL}/${lastPart}/?${params.toString()}`)
 
-return `http://localhost:4000/${lastPart}/?${params.toString()}`;
+return `${import.meta.env.BASE_URL}/${lastPart}/?${params.toString()}`;
 };
 
 

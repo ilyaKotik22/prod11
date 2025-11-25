@@ -11,7 +11,7 @@ export const connectApi = async (data: ConnectData): Promise<void> => {
   console.log('Отправляем заявку:', data);
 
   try {
-    const response = await fetch('http://localhost:4000/lead/', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/lead`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -11,7 +11,7 @@ export const sendLead = async (data: LeadData): Promise<void> => {
   console.log('Отправляем лид на сервер:', data); // ← ЭТО ДОЛЖНО ПОЯВИТЬСЯ В КОНСОЛИ!
 
   try {
-    const response = await fetch('http://localhost:4000/lead/', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/lead`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -43,27 +43,33 @@ export const Navigation: React.FC = () => {
   };
 
   const getFilterUrl = () => {
-    const params = new URLSearchParams();
-    if (price === 'До 22 млн') params.set('maxPrice', '22000000');
-    else if (price === '22–29 млн') params.set('maxPrice', '29000000');
-    else if (price === '29–40 млн') params.set('maxPrice', '40000000');
+  const params = new URLSearchParams();
 
-    if (bedrooms) {
-      const b = bedrooms === 'Студия' ? '0' : bedrooms;
-      params.set('bedrooms', b);
-    }
-    if (realtyType) params.set('type', realtyType);
-    if (buyType) params.set('action', buyType);
-    if (city) params.set('city', city);
+  if (price === 'До 22 млн') params.set('maxPrice', '22000000');
+  else if (price === '22–29 млн') params.set('maxPrice', '29000000');
+  else if (price === '29–40 млн') params.set('maxPrice', '40000000');
 
-    const query = params.toString();
-    const correctPath = goToCorrectPage(buyType, realtyType);
-    const finalUrl = query
-      ? `http://localhost:4000/${correctPath}?${query}`
-      : `http://localhost:4000/${correctPath}`;
+  if (bedrooms) {
+    const b = bedrooms === 'Студия' ? '0' : bedrooms;
+    params.set('bedrooms', b);
+  }
+  if (realtyType) params.set('type', realtyType);
+  if (buyType) params.set('action', buyType);
+  if (city) params.set('city', city);
 
-    return decodeURIComponent(finalUrl);
-  };
+  const query = params.toString();
+  const correctPath = goToCorrectPage(buyType, realtyType);
+
+  // ← ИСПРАВЛЕНО: используем VITE_API_URL, а не BASE_URL
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  const finalUrl = query
+    ? `${API_URL}/${correctPath}?${query}`
+    : `${API_URL}/${correctPath}`;
+
+  console.log('Запрос на бэкенд:', finalUrl);
+  return finalUrl;
+};
 
   useEffect(() => {
     const finalUrl = getFilterUrl();

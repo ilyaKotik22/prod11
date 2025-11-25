@@ -7,6 +7,7 @@
 }
 
 .container {
+  padding-top: 120px;
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -25,10 +26,10 @@
   flex-wrap: wrap;
   gap: 16px;
   
-  background: rgba(255, 255, 255, 0.08);
+ 
   border-radius: 16px;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(110, 228, 226, 0.2);
+
 
   /* Прижато к левому краю */
   justify-content: flex-start;
@@ -119,7 +120,7 @@
     h4 {
       margin: 0 0 12px;
       padding-bottom: 8px;
-      border-bottom: 1px solid rgba(110, 228, 226, 0.3);
+      
       color: #6ee4e2;
       font-size: 15px;
       font-weight: 600;
