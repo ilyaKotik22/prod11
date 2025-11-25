@@ -41,9 +41,10 @@ gap: 20px;
     gap: 25px;  
 
     div {
-        padding: 18px 26px;
+        padding: 20px 26px;
+        margin-top: 10px;
         background-color: #0A1616;
-        border-radius: 4px;
+        border-radius: 10px;
         h1{
             color: var(--action-color);
         }

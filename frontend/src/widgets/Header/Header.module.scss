@@ -17,7 +17,14 @@ header{
         
     }
     .rightHalf{
-        width: 28%;
+        width: 30%;
+        display: flex;
+        nav{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        
         
     }
     .onMobile{

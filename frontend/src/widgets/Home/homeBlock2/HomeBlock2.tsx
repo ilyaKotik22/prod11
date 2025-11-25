@@ -1,57 +1,67 @@
+// HomeBlock2.tsx
 import React from 'react';
-import fot1 from '../../../../public/new_building.png'
-import fot2 from '../../../../public/secondary_real_estate.png'
-import fot3 from '../../../../public/rental_real_estate.png'
-import fot4 from '../../../../public/ddd.png'
-import fot5 from '../../../../public/country_real_estate.png'
-import fot6 from '../../../../public/mansion_real_estate.png'
-import fot7 from '../../../../public/sell.png'
-import fot8 from '../../../../public/rent.png'
-import style from './HomeBlock2.module.scss'
+import style from './HomeBlock2.module.scss';
+
+import fot1 from '../../../../public/new_building.png';
+import fot2 from '../../../../public/secondary_real_estate.png';
+import fot3 from '../../../../public/rental_real_estate.png';
+import fot4 from '../../../../public/ddd.png';
+import fot5 from '../../../../public/country_real_estate.png';
+import fot6 from '../../../../public/mansion_real_estate.png';
+import fot7 from '../../../../public/sell.png';
+import fot8 from '../../../../public/rent.png';
+
+const items = [
+  { img: fot1, title: 'Новостройки', accent: true },
+  { img: fot2, title: 'Вторичная недвижимость', accent: false },
+  { img: fot3, title: 'Аренда недвижимости', accent: false },
+  { img: fot4, title: 'Коммерческая недвижимость', accent: false },
+  { img: fot5, title: 'Загородная недвижимость', accent: false },
+  { img: fot6, title: 'Элитные апартаменты', accent: true },
+  { img: fot7, title: 'Продать недвижимость', accent: true },
+  { img: fot8, title: 'Сдать в аренду', accent: false },
+];
 
 export const HomeBlock2: React.FC = () => {
-return (
+  return (
     <section className={style.HomeBlock2}>
-        <section className={style.sec1}>
-            <article className={style.modArt}>
-                <p>Новостройки</p>
-                <img src={fot1} alt="" />
+      <div className={style.container}>
+        {/* Строка 1 */}
+        <div className={style.row}>
+          {items.slice(0, 3).map((item, i) => (
+            <article key={i} className={`${style.card} ${item.accent ? style.accent : ''}`}>
+              <img src={item.img} alt={item.title} className={style.bgImage} />
+              <div className={style.overlay}>
+                <h3>{item.title}</h3>
+              </div>
             </article>
-            <article>
-                <p>Новостройки</p>
-                <img src={fot2} alt="" />
-            </article>
-            <article>
-                <p>Новостройки</p>
-                <img src={fot3} alt="" />
-            </article>
-        </section>
+          ))}
+        </div>
 
-        <section className={style.sec2}>
-            <article>
-                <p>Новостройки</p>
-                <img src={fot4} alt="" />
+        {/* Строка 2 */}
+        <div className={style.row}>
+          {items.slice(3, 6).map((item, i) => (
+            <article key={i} className={`${style.card} ${item.accent ? style.accent : ''}`}>
+              <img src={item.img} alt={item.title} className={style.bgImage} />
+              <div className={style.overlay}>
+                <h3>{item.title}</h3>
+              </div>
             </article>
-            <article>
-                <p>Новостройки</p>
-                <img src={fot5} alt="" />
-            </article>
-            <article className={style.modArt}>
-                <p>Новостройки</p>
-                <img src={fot6} alt="" />
-            </article>
-        </section>
+          ))}
+        </div>
 
-        <section className={style.sec3}>
-            <article className={style.modArt}>
-                <p>Новостройки</p>
-                <img src={fot7} alt="" />
+        {/* Строка 3 */}
+        <div className={style.row}>
+          {items.slice(6, 8).map((item, i) => (
+            <article key={i} className={`${style.card} ${item.accent ? style.accent : ''}`}>
+              <img src={item.img} alt={item.title} className={style.bgImage} />
+              <div className={style.overlay}>
+                <h3>{item.title}</h3>
+              </div>
             </article>
-            <article>
-                <p>Новостройки</p>
-                <img src={fot8} alt="" />
-            </article>
-        </section>
+          ))}
+        </div>
+      </div>
     </section>
-);
+  );
 };

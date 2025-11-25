@@ -1,42 +1,182 @@
-.block4{
-    margin-top: 120px;
-    display: grid;
-    grid-template-columns: 8fr 4fr; /* соотношение 1:15 */
-    gap: 15px; /* расстояние между колонками, можно убрать */
+.block4 {
+  margin-top: 120px;
+  padding: 0 20px;
+}
 
-  section{
-    .drob{
-        display: grid;
-        grid-template-columns: 6fr 6fr; /* соотношение 1:15 */
-        gap: 15px; 
-        
-        .blockInfoMod{
-            background-color: #000A0D;
-        }
-    }
-    div{
-        margin-top: 10px;
-    }
-    .blockInfo{
-        background-color: #000A0D;
+.header {
+  text-align: center;
+  margin-bottom: 60px;
 
-        .splite{
-            display: flex;
+  h1 {
+    font-size: 42px;
+    margin-bottom: 16px;
+  }
 
-            
-        }
-    }
+  p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #aaa;
   }
 }
-h1{
-    font-size: 36px;
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
-b{
-    color: var(--action-color);
+
+.leftColumn {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 20px;
 }
-button{
-    margin-top: 15px;
+
+.featuredComplex,
+.rentalCard,
+.shiftCard {
+  background: #000A0D;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
 }
-.spliteItem{
-                padding: 20px;
-            }
+
+.complexInfo,
+.rentalInfo,
+.shiftInfo {
+  padding: 32px;
+  color: white;
+}
+
+.tag {
+  font-size: 14px;
+  color: #6ee4e2;
+  margin-bottom: 8px;
+  display: block;
+}
+
+h2 {
+  font-size: 36px;
+  margin: 12px 0;
+  line-height: 1.2;
+}
+
+.price {
+  font-size: 18px;
+  margin: 16px 0;
+  b { color: var(--action-color); }
+}
+
+.desc {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #ccc;
+  margin-bottom: 24px;
+}
+
+.btn {
+  padding: 14px 28px;
+  background: transparent;
+  border: 1.5px solid var(--action-color);
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+
+  &:hover {
+    background: var(--action-color);
+    transform: translateY(-2px);
+  }
+}
+
+.rentalCard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.rentalImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rentalTags {
+  margin-bottom: 16px;
+  span { margin-left: 16px; color: #999; font-size: 14px; }
+}
+
+.smallCards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.smallCard {
+  background: #000A0D;
+  border-radius: 12px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
+}
+
+.smallInfo {
+  padding: 16px;
+  color: white;
+  font-size: 14px;
+
+  p:first-child {
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+}
+
+.rightColumn {
+  display: grid;
+  align-content: start;
+}
+
+.shiftCard {
+  position: relative;
+  height: 100%;
+  min-height: 680px;
+}
+
+.shiftMainImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.shiftOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 40px;
+  background: linear-gradient(180deg, transparent 0%, #000A0D 50%);
+  color: white;
+}
+
+.shiftLogo {
+  height: 60px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 1024px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+  .rentalCard {
+    grid-template-columns: 1fr;
+  }
+  .rentalImg {
+    height: 300px;
+  }
+}
