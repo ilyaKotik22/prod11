@@ -9,6 +9,7 @@ color: white;
 }
 
 .background {
+    width: 100%;
 position: absolute;
 inset: 0;
 background: url('../../../../public/team_bg.png') center/cover no-repeat;
@@ -51,4 +52,25 @@ gap: 20px;
 }
 
 }
+}
+@media (max-width: 1100px) {
+    .desc{
+        display: none;
+    }
+    .hero{
+        height: 50vh;
+        padding: 0 6vw;
+    }
+    .background{
+        height: 50vh;
+    }
+    .title{
+        margin-top: 40px;
+        text-align: center;
+        font-size: 24px;
+    }
+    .blocks{
+        display: none;
+    }
+
 }

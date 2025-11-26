@@ -1,26 +1,108 @@
-.block3{
-    margin-top: 120px;
-    display: flex;
+.block3 {
+  margin-top: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap; // важно для мобильных
 
-    .author{
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
+  // На больших экранах — два столбца
+  @media (min-width: 1024px) {
+    flex-wrap: nowrap;
+  }
+}
 
-        .desc{
-            margin-top: -60px;
-        }
-        h1{
-            font-size: 55px;
-        }
-        *{
-            width: 100%;
-        }
-        button{
-            font-size: 18px;
-            width: max-content;
-            margin-top: -20px;
-        }
+.author {
+  flex: 1;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  // Убираем ненужные wrap и 100% ширину у детей
+}
+
+.title {
+  font-size: 55px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 24px;
+
+  // Уменьшаем только при крайней необходимости
+  @media (max-width: 640px) {
+    font-size: 42px;
+  }
+  @media (max-width: 480px) {
+    font-size: 36px;
+  }
+}
+
+.desc {
+  font-size: 20px; // предположил, у тебя был такой размер
+  line-height: 1.4;
+  margin-bottom: 32px;
+
+  // Скрываем desktop-<br>, показываем мобильный
+  br {
+    display: none;
+  }
+  
+  .brMobile {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .brMobile {
+      display: block;
     }
+  }
 
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
+}
+
+.btn {
+    font-size: 16px;
+    width: max-content;
+  a {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+// -------------------
+// Правая часть с картинкой
+// -------------------
+.imageWrapper {
+  flex: 1;
+  min-width: 320px;
+  max-width: 600px; // ограничиваем, чтобы не растягивалась слишком сильно
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 20px; // если хочешь скругление, как у команды
+    object-fit: cover;
+  }
+
+  // На мобильных — картинка сверху или снизу, но по центру
+  @media (max-width: 1023px) {
+    order: -1; // поднимаем картинку над текстом на мобильных
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 100%;
+  }
 }
