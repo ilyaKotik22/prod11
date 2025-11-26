@@ -9,6 +9,7 @@ import { ItemPage } from "../../pages/itemPage/ItemPage"
 import { NBCitemPage } from "../../pages/NBC/NBCitemePage"
 import { NewBuild } from "../../pages/new-building-complexes/new-building-complexes"
 import { Rental } from "../../pages/rental/Rental"
+import { TeamPage } from "../../pages/team/TeamPage"
 
 
 export type MyRoutesType = {
@@ -23,6 +24,10 @@ export const MyRoutes = [
     {
         url: '/blog',
         component: BlogPage
+    },
+    {
+        url: '/team',
+        component: TeamPage
     },
     {
         url: '/ready-apartments',

@@ -8,10 +8,13 @@ export const HomeBlock3: React.FC = () => {
 return (
   <section className={styles.block3}>
     <section className={styles.author}>
-      <h1>Авторские каталоги недвижимости</h1>
-      <div className={styles.desc}>Выберите и скачайте pdf-каталог <br /> с лучшими предложениями компании.</div>
+      <h1>Наша команда</h1>
+      <div className={styles.desc}>Выберите и свяжитесь <br /> с лучшими сотрудниками компании.</div>
        <button>
-      Скачать каталог
+        <a href="/team">
+          наша команда
+        </a>
+      
     </button>
     </section>
   

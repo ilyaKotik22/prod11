@@ -10,7 +10,7 @@ export const Header: React.FC = () => {
     const [popupOpen, setPopupOpen] = useState(false);
 
     return (
-        <div className='container'>
+        
             <header className={style.header}>
                 <section className={style.leftHalf}>
                     <nav>
@@ -83,7 +83,7 @@ export const Header: React.FC = () => {
                 <HeaderCallPopup isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
             </header>
 
-        </div>
+       
 
     );
 };
