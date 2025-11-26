@@ -49,9 +49,10 @@ header{
         display: none;
     }
     .rightHalf{
-        display: none;
+        display: none !important;
     }
   .onMobile{
+        padding: 0 6vw;
         width: 100%;
         display: flex !important;
         justify-content: space-between;
