@@ -1,0 +1,95 @@
+.officeMapSection {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 40px;
+  align-items: start;
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+/* === КАРТА — полностью изолирована === */
+.mapBlock {
+  height: 560px;               // фиксированная высота
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  position: relative;          // важно для Leaflet
+  background: #f0f0f0;        // fallback пока карта грузится
+}
+
+.mapContainer {
+  height: 100% !important;
+  width: 100% !important;
+  border-radius: 20px;
+}
+
+/* Убираем любые возможные проблемы с Leaflet */
+:global(.leaflet-container) {
+  border-radius: 20px;
+  font-family: inherit;
+}
+
+/* Попап внутри карты */
+.popupContent {
+  min-width: 200px;
+  padding: 4px 0;
+  line-height: 1.4;
+}
+
+/* === Список офисов === */
+.officeList {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  height: fit-content;
+  position: sticky;
+  top: 100px; // прилипает при скролле страницы
+
+  h3 {
+    margin: 0 0 20px;
+    font-size: 24px;
+  }
+}
+
+.officeItem {
+  padding: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 8px;
+
+  &:hover {
+    background: #f8f9fa;
+  }
+
+  &.active {
+    background: #e3f2fd;
+    border-left: 4px solid #1976d2;
+  }
+}
+
+.officeName {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.officeAddress,
+.officePhone {
+  font-size: 14px;
+  color: #555;
+}
+
+.hint {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #777;
+  font-style: italic;
+}
