@@ -5,6 +5,7 @@ import { fetchApartments } from '../../widgets/Immovables/ImmMenu/store/store';
 import type { RootState } from '../../app/store';
 import styles from './ItemPage.module.scss';
 import { CallModal } from './ModalComp/ModalComp';
+import MapItem from './mapItem/Mapitem';
 
 export const ItemPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -158,7 +159,12 @@ export const ItemPage: React.FC = () => {
           </div>
         </div>
       </div>
-
+      <MapItem
+  lat={55.7558}
+  lng={37.6173}
+  title="Главный офис"
+  description="Москва, ул. Примерная, 10"
+/>
       <CallModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </main>
   );

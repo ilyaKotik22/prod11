@@ -49,3 +49,6 @@ button{
   font-size: 12px;
   font-weight: bold;
 }
+h3{
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0);
+}

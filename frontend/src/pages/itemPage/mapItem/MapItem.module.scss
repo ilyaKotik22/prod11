@@ -1,0 +1,44 @@
+.mapItem {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.mapContainer {
+  height: 100%;
+  width: 100%;
+  border-radius: 16px;
+
+  // Убираем лишние отступы от Leaflet
+  :global(.leaflet-container) {
+    border-radius: 16px;
+    font-family: inherit;
+  }
+}
+
+.popup {
+  min-width: 180px;
+  text-align: center;
+  padding: 4px 0;
+
+  strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 4px;
+    color: #1a1a1a;
+  }
+}
+
+.popupDesc {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.4;
+}
