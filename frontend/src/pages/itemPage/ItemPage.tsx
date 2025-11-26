@@ -14,41 +14,33 @@ export const ItemPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mainImage, setMainImage] = useState<string>('');
 
-  // === КОРРЕКТНОЕ ИЗВЛЕЧЕНИЕ КАРТИНОК ИЗ ЛЮБОЙ СТРУКТУРЫ ===
+  // Извлекаем массив URL из items.images (массив объектов { url: '...' })
   const images: string[] = useMemo(() => {
-    // Возможные пути к массиву картинок
-    const possibleImages = 
-      items?.images ||                     // обычный объект
-      items?.complex?.images ||            // если объект внутри complex
-      items?.gallery ||                    // если есть отдельная галерея
-      items?.photos || 
-      [];
-
-    // Если это массив строк — возвращаем как есть
-    if (Array.isArray(possibleImages) && possibleImages.length > 0) {
-      return possibleImages.filter((img): img is string => typeof img === 'string' && img.includes('http'));
+    if (!items?.images || !Array.isArray(items.images) || items.images.length === 0) {
+      return ['https://via.placeholder.com/800x600.png?text=Нет+фото'];
     }
 
-    // Если ничего нет — возвращаем заглушки
-    return [
-      'https://9c9a241d-11ea-4f71-8a89-7a1d2f462630.selstorage.ru/images/0c9479d4-fba0-4899-8881-944532826423.jpg',
-      'https://i.pinimg.com/1200x/70/56/85/70568566427083968c4a628c1c5f38de.jpg',
-      'https://9c9a241d-11ea-4f71-8a89-7a1d2f462630.selstorage.ru/images/0c9479d4-fba0-4899-8881-944532826423.jpg',
-    ];
+    return items.images
+      .map((img: any) => {
+        // Поддерживаем разные форматы: { url }, { image }, просто строка
+        return typeof img === 'string' ? img : img?.url || img?.image || null;
+      })
+      .filter((url): url is string => !!url && typeof url === 'string');
   }, [items]);
 
   // Устанавливаем первое фото как главное
   useEffect(() => {
     if (images.length > 0 && !mainImage) {
+      console.log(images[1])
       setMainImage(images[0]);
     }
   }, [images, mainImage]);
 
-  // === Запрос данных по URL ===
+  // Запрос данных по URL
   const buildApiUrlFromLocation = () => {
     const parts = window.location.href.split('/').filter(Boolean);
-    const last = parts[parts.length - 1];      // ID
-    const prev = parts[parts.length - 2];      // тип (rental-apartments, new-building-apartments и т.д.)
+    const last = parts[parts.length - 1];     // ID
+    const prev = parts[parts.length - 2];     // тип (ready-apartments, commercial-properties и т.д.)
     return `${import.meta.env.VITE_API_URL}/${prev}/${last}`;
   };
 
@@ -69,8 +61,8 @@ export const ItemPage: React.FC = () => {
             {/* Главное фото */}
             <div className={styles.mainImageWrapper}>
               <img
-                src={mainImage}
-                alt="Основное фото"
+                src={images[0]}
+                alt="Основное фото объекта"
                 className={styles.mainImage}
               />
               {images.length > 1 && (
@@ -90,7 +82,7 @@ export const ItemPage: React.FC = () => {
                     className={`${styles.thumbnail} ${mainImage === img ? styles.thumbnailActive : ''}`}
                     onClick={() => setMainImage(img)}
                   >
-                    <img src={img} alt={`Фото ${index + 1}`} />
+                    <img src={img} alt={`Фото ${index + 1}`} loading="lazy" />
                   </button>
                 ))}
               </div>
@@ -113,7 +105,7 @@ export const ItemPage: React.FC = () => {
               <div className={styles.meta}>
                 <span className={styles.location}>
                   {items.metro || items.complex?.metro},{' '}
-                  {items.metroDistance || items.complex?.metroDistance} мин.
+                  {items.metroDistance || items.complex?.metroDistance} мин. пешком
                 </span>
               </div>
             )}
@@ -124,28 +116,23 @@ export const ItemPage: React.FC = () => {
                   ? `${Number(items.price).toLocaleString('ru-RU')} ₽`
                   : items.pricePerMonth
                   ? `${Number(items.pricePerMonth).toLocaleString('ru-RU')} ₽/мес`
-                  : 'Цена не указана'}
+                  : 'Цена по запросу'}
               </div>
 
               <div className={styles.tags}>
                 {items.bedrooms !== undefined && (
                   <span className={styles.tag}>
-                    {items.bedrooms === 0 ? 'Студия' : `${items.bedrooms} сп.`}
+                    {items.bedrooms === 0 ? 'Студия' : `${items.bedrooms}-комн.`}
                   </span>
                 )}
-                {items.floor && (
-                  <span className={styles.tag}>{items.floor} этаж</span>
-                )}
-                {(items.area || items.landArea) && (
-                  <span className={styles.tag}>
-                    {items.area ? `${items.area} м²` : `${items.landArea} соток`}
-                  </span>
-                )}
+                {items.floor && <span className={styles.tag}>{items.floor} этаж</span>}
+                {items.area && <span className={styles.tag}>{items.area} м²</span>}
+                {items.landArea && <span className={styles.tag}>{items.landArea} соток</span>}
               </div>
             </div>
 
             <p className={styles.description}>
-              {items?.complex?.description || items?.description || 'Описание временно отсутствует.'}
+              {items?.description || items?.complex?.description || 'Описание отсутствует.'}
             </p>
 
             <div className={styles.footer}>
@@ -159,12 +146,16 @@ export const ItemPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Карта */}
       <MapItem
-  lat={55.7558}
-  lng={37.6173}
-  title="Главный офис"
-  description="Москва, ул. Примерная, 10"
-/>
+        lat={items.lat || 55.7558}
+        lng={items.lng || 37.6173}
+        title={items.title || items.complex?.name || 'Объект'}
+        description={items.address || 'Адрес не указан'}
+        height="420px"
+      />
+
       <CallModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </main>
   );
