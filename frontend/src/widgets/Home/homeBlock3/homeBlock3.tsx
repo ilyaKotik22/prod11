@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './homeBlock.module.scss';
-import fon1 from '../../../../public/Group1394.png';
+import fon1 from '../../../../public/team15.jpg'
 
 
 export const HomeBlock3: React.FC = () => {

@@ -69,9 +69,7 @@
     display: block;
   }
 
-  &:hover {
-    background: rgba(0, 0, 0, 0.05);
-  }
+  
 
   @media (max-width: 480px) {
     width: 100%;
@@ -91,7 +89,7 @@
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 20px; // если хочешь скругление, как у команды
+    border-radius: 10px; // если хочешь скругление, как у команды
     object-fit: cover;
   }
 
