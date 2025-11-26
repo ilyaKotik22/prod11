@@ -9,6 +9,10 @@ import foto7 from '../../../public/team7-no.png';
 import foto8 from '../../../public/team8-no.png';
 import foto9 from '../../../public/team9-no.png';
 import foto10 from '../../../public/team10-no.png';
+import foto11 from '../../../public/team11-no.png';
+import foto12 from '../../../public/team12-no.png';
+import foto13 from '../../../public/team13-no.png';
+import foto14 from '../../../public/team14-no.png';
 import styles from './Team.module.scss';
 
 export const TeamMenu: React.FC = () => {
@@ -23,6 +27,11 @@ export const TeamMenu: React.FC = () => {
     { name: 'Чеченина Юлия Васильевна',     phone: '89625564111', foto: foto8 },
     { name: 'Ахметзянова Виктория Юрьевна', phone: '89061137911', foto: foto9 },
     { name: 'Тумашилова Юлия Сергеевна',    phone: '89600799087', foto: foto10 },
+
+    { name: 'Ахмедзянова Гульназ Азатовна', phone: '89061163611', foto: foto11 },
+    { name: 'Якименко Георгий Алексеевич ', phone: '89061168011', foto: foto12 },
+    { name: 'Попцов Артём Игоревич', phone: '89053191511', foto: foto13 },
+    { name: 'Салахутдинов Риналь Генарович', phone: '89656116911', foto: foto14 },
   ];
 
   // Форматирование телефона: +7 (XXX) XXX-XX-XX
