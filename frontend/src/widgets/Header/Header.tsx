@@ -4,9 +4,10 @@ import logo from '../../../public/Bez44ona3.png'
 import watsLogo from '../../../public/whatsappLogo.svg'
 import telegLogo from '../../../public/telegramLogo.svg'
 import HeaderCallPopup from './HeaderPoupup/HeaderPopup';
+import { useNavigate } from 'react-router-dom';
 export const Header: React.FC = () => {
     const [dropDownActive,setDropDown] = useState<boolean>(false)
-
+    const navigate = useNavigate()
     const [popupOpen, setPopupOpen] = useState(false);
 
     return (
@@ -14,15 +15,15 @@ export const Header: React.FC = () => {
             <header className={style.header}>
                 <section className={style.leftHalf}>
                     <nav>
-                        <a href="/">
+                        <div onClick={()=>navigate('/')}>
                             <img src={logo} alt="logo" />
-                        </a>
-                        <a href="/new-building-complexes">Новостроки</a>
-                        <a href="/ready-apartments">Готовые кварирвы</a>
-                        <a href="/rental-apartments">Арендаквартир</a>
-                        <a href="/country-properties">Загородная</a>
-                        <a href="/commercial-properties">Коммерческая</a>
-                        <a href="/">Агенство</a>
+                        </div>
+                        <div onClick={()=>navigate('/new-building-complexes')} >Новостроки</div>
+                        <div onClick={()=>navigate('/ready-apartments')} >Готовые кварирвы</div>
+                        <div onClick={()=>navigate('/rental-apartments')}>Арендаквартир</div>
+                        <div onClick={()=>navigate('/country-properties')} >Загородная</div>
+                        <div onClick={()=>navigate('/commercial-properties')}>Коммерческая</div>
+                        <div onClick={()=>navigate('/')}>Агенство</div>
                     </nav>
                 </section>
                 <section className={style.rightHalf} >
@@ -39,7 +40,10 @@ export const Header: React.FC = () => {
                 </section>
                 <section className={style.onMobile}>
                     <div>
-                        <img src={logo} alt="logo" />
+                        <a href="/">
+                            <img src={logo} alt="logo" />
+                        </a>
+                        
                     </div>
                     <div style={{display: dropDownActive ? 'block' : 'none'}} className={style.dropdownMenu}>
                         <div className={style.header}>
@@ -55,19 +59,19 @@ export const Header: React.FC = () => {
                             
                         </div>
                         <div className="">
-                            <a href="">Новостроки</a>
+                            <a href="/new-building-complexes">Новостроки</a>
                         </div>
                         <div className="">
-                            <a href="">Готовые кварирвы</a>
+                            <a href="/ready-apartments">Готовые кварирвы</a>
                         </div>
                         <div className="">
-                            <a href="">Арендаквартир</a>
+                            <a href="/rental-apartments">Арендаквартир</a>
                         </div>
                         <div className="">
-                            <a href="">Загодная</a>
+                            <a href="/country-properties">Загодная</a>
                         </div>
                         <div className="">
-                            <a href="">Коммерческая</a>
+                            <a href="/commercial-properties">Коммерческая</a>
                         </div>
                         <div className="">
                             <a href="">Агенство</a>

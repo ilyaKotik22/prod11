@@ -10,8 +10,12 @@ header{
     display: flex;
     justify-content: space-between;
     
+    
     .leftHalf{
         width: 50vw;
+        *{
+            cursor: pointer;
+        }
 
         
     }

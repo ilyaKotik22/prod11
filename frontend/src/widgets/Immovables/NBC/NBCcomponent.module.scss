@@ -1,9 +1,100 @@
-.NBCc{
-    padding-top: 120px;
-    ul{
-    margin-top: 60px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px;
+// NBCcomponent.module.scss
+
+.NBCc {
+  padding: 140px 20px 100px;
+  color: white;
+  min-height: 100vh;
 }
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 42px;
+  font-weight: 600;
+  text-align: left;
+  margin-bottom: 50px;
+  color: #6ee4e2;
+  letter-spacing: 1px;
+  text-shadow: 0 0 20px rgba(110, 228, 226, 0.3);
+
+  @media (max-width: 968px) {
+    text-align: center;
+    font-size: 36px;
+  }
+  @media (max-width: 480px) {
+    font-size: 30px;
+  }
+}
+
+/* === КАТЕГОРИИ — 1 в 1 как кнопки в Navigation === */
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-start;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 60px 0;
+
+  @media (max-width: 968px) {
+    justify-content: center;
+  }
+}
+
+.categories li {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  min-width: 200px;
+  text-align: center;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+  user-select: none;
+
+  /* Ховер — точно как .trigger:hover */
+  &:hover {
+    background: rgba(110, 228, 226, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(110, 228, 226, 0.15);
+    color: #6ee4e2;
+  }
+
+  /* Активная категория — ярко, как выбранный фильтр */
+  &.active {
+    background: rgba(110, 228, 226, 0.3);
+    color: #6ee4e2;
+    border: 1px solid rgba(110, 228, 226, 0.6);
+    box-shadow: 0 0 25px rgba(110, 228, 226, 0.4);
+    font-weight: 700;
+    transform: translateY(-3px);
+  }
+
+  @media (max-width: 480px) {
+    min-width: 160px;
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+}
+
+/* Сетка карточек */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 32px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 }
