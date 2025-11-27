@@ -34,6 +34,7 @@ export const ImmMenu: React.FC = () => {
       
       {items.data && items.data.map((apartment:ape) => (
         <ImmItem 
+        price={apartment.price && apartment.price}
         foto={apartment.images[0]?.url}
         id={apartment.id} 
         title={apartment.title ?? apartment.name} 

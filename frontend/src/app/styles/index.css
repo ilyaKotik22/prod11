@@ -52,3 +52,8 @@ button{
 h3{
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0);
 }
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

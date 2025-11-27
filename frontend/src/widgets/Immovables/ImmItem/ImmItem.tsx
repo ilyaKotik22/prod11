@@ -7,14 +7,15 @@ export interface ImmItemProps {
   id: number;
   title: string;
   address?: string;
-  area?: number;           // теперь опционально
-  pricePerMonth?: number;
-  bedrooms?: number;       // опционально
+  area?: number;
+  pricePerMonth?: number;   // аренда
+  bedrooms?: number;
+  price?: number;           // продажа — приоритет выше
   floor?: number;
-  // опционально
-  metro?: string;          // опционально
+  metro?: string;
   metroDistance?: number;
   foto?: string;
+  string;
   partUrl?: string;
 }
 
@@ -22,6 +23,7 @@ export const ImmItem: React.FC<ImmItemProps> = ({
   id,
   title,
   address,
+  price,
   area,
   pricePerMonth,
   bedrooms,
@@ -31,11 +33,23 @@ export const ImmItem: React.FC<ImmItemProps> = ({
   foto,
   partUrl: customPartUrl,
 }) => {
-  const currentPart = customPartUrl || window.location.pathname.split('/').filter(Boolean).pop() || 'objects';
+  const currentPart = customPartUrl 
+    || window.location.pathname.split('/').filter(Boolean).pop() 
+    || 'objects';
 
-  const displayPrice = pricePerMonth
-    ? `${pricePerMonth.toLocaleString('ru-RU')} ₽ / месяц`
-    : 'Цена по запросу';
+  // Правильная логика отображения цены
+  const displayPrice = React.useMemo(() => {
+    if (price !== undefined && price > 0) {
+      return `${price.toLocaleString('ru-RU')} ₽`;
+    }
+    if (pricePerMonth !== undefined && pricePerMonth > 0) {
+      return `${pricePerMonth.toLocaleString('ru-RU')} ₽ / месяц`;
+    }
+    return 'Цена по запросу';
+  }, [price, pricePerMonth]);
+
+  // Определяем тип сделки для стилизации (по желанию)
+  const isSale = price !== undefined && price > 0;
 
   return (
     <li className={style.card}>
@@ -57,17 +71,20 @@ export const ImmItem: React.FC<ImmItemProps> = ({
           {metro && (
             <div className={style.metro}>
               <img src={fon2} alt="метро" />
-              <div>{metro}</div>
+              <span>{metro}</span>
               {metroDistance !== undefined && metroDistance > 0 && (
-                <div>{metroDistance} мин.</div>
+                <span className={style.metroDistance}>{metroDistance} мин.</span>
               )}
             </div>
           )}
 
           <div className={style.footer}>
-            <div className={style.price}>{displayPrice}</div>
+            {/* Цена с правильным приоритетом и стилями */}
+            <div className={`${style.price} ${isSale ? style.salePrice : ''}`}>
+              {displayPrice}
+            </div>
 
-            {/* Параметры — только те, что есть */}
+            {/* Параметры — только те, что переданы */}
             {(area !== undefined || bedrooms !== undefined || floor !== undefined) && (
               <div className={style.params}>
                 {area !== undefined && area > 0 && (
@@ -76,14 +93,12 @@ export const ImmItem: React.FC<ImmItemProps> = ({
                     <span>{area} м²</span>
                   </div>
                 )}
-
                 {bedrooms !== undefined && (
                   <div className={style.param}>
                     <p>Спальни</p>
                     <span>{bedrooms === 0 ? 'Студия' : `${bedrooms}-комн.`}</span>
                   </div>
                 )}
-
                 {floor !== undefined && (
                   <div className={style.param}>
                     <p>Этаж</p>

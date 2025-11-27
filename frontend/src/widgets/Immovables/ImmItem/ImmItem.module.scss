@@ -1,10 +1,13 @@
 // ImmItem.module.scss
+
 .card {
   border-radius: 12px;
   overflow: hidden;
   background: #fff;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  width: 25w;
+  
 
   &:hover {
     transform: translateY(-6px);
@@ -20,33 +23,60 @@
 
 .image {
   width: 100%;
-  height: 220px;
+  height: 240px;
   object-fit: cover;
+
+  // На мобильных чуть ниже картинка, чтобы не "давить"
+  @media (max-width: 480px) {
+    height: 200px;
+  }
 }
 
 .content {
-  padding: 16px;
+  padding: 18px 16px 20px;
+
+  @media (max-width: 480px) {
+    padding: 16px 14px;
+  }
 }
 
 .head {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
   color: #0e0e10;
-  margin: 0 0 6px;
-  line-height: 1.3;
+  margin: 0 0 8px;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media (max-width: 768px) {
+    font-size: 19px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
 }
 
 .address {
   font-size: 14px;
   color: #666;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   gap: 6px;
 
   &::before {
     content: "Location";
-    font-size: 15px;
+    font-size: 16px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+    margin-bottom: 8px;
   }
 }
 
@@ -56,11 +86,23 @@
   gap: 8px;
   font-size: 14px;
   color: #444;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 
   img {
     width: 18px;
     height: 18px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+    margin-bottom: 12px;
+    gap: 6px;
+
+    img {
+      width: 16px;
+      height: 16px;
+    }
   }
 }
 
@@ -68,43 +110,79 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding-top: 14px;
+  padding-top: 16px;
   border-top: 1px solid #eee;
+  flex-wrap: wrap; // важно для мобильных
+  gap: 12px 0;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
 }
 
 .price {
-  font-size: 19px;
+  font-size: 21px;
   font-weight: 700;
   color: #0e0e10;
+  white-space: nowrap;
+
+  &.salePrice {
+    
+    font-size: 23px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+    &.salePrice {
+      font-size: 21px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    font-size: 19px;
+    &.salePrice {
+      font-size: 20px;
+    }
+  }
 }
 
 .params {
   display: flex;
-  gap: 18px;
-  font-size: 13px;
+  gap: 20px;
+  font-size: 13.5px;
   color: #555;
+
+  @media (max-width: 768px) {
+    gap: 14px;
+    font-size: 13px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 16px;
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 
 .param {
   text-align: center;
-  min-width: 48px;
+  min-width: 52px;
 
   p {
     margin: 0 0 4px;
     color: #999;
     font-weight: 500;
+    font-size: 0.95em;
   }
 
   span {
     font-weight: 600;
     color: #0e0e10;
   }
-}
 
-/* Адаптив */
-@media (max-width: 768px) {
-  .params {
-    gap: 12px;
-    font-size: 12px;
+  @media (max-width: 480px) {
+    min-width: auto;
   }
 }

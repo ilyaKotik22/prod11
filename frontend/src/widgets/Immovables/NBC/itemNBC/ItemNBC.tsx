@@ -16,9 +16,11 @@ export interface ImmItemProps {
   metroDistance?: number;
   path: string
   foto:string
+  price: number
 }
 
 export const ItemNBC: React.FC<ImmItemProps> = ({
+  price,
   id,
   foto,
   title,
@@ -51,9 +53,9 @@ export const ItemNBC: React.FC<ImmItemProps> = ({
 
           <div className={style.footer}>
             <div className={style.price}>
-              {pricePerMonth
-                ? `${pricePerMonth.toLocaleString('ru-RU')} ₽ / месяц`
-                : '360 000 ₽ / месяц'}
+              {
+                 `${price} ₽`
+                }
             </div>
 
             <div className={style.params}>
