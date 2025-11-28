@@ -5,6 +5,7 @@ import { ImmMenu } from '../../widgets/Immovables/ImmMenu/ImmMenu';
 export const CounPro: React.FC = () => {
 return (
     <main className='container'>
+        
         <Navigation/>
         <ImmMenu/>
     </main>

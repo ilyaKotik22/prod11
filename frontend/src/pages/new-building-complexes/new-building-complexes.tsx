@@ -5,7 +5,11 @@ import { ImmMenu } from '../../widgets/Immovables/ImmMenu/ImmMenu';
 export const NewBuild: React.FC = () => {
 return (
     <main className='container'>
-        <Navigation/>
+        <div style={{display:'none'}}>
+            <Navigation />
+        </div>
+        <br /><br /><br /><br />
+        <h1>Новостройки</h1>
         <ImmMenu/>
     </main>
 );

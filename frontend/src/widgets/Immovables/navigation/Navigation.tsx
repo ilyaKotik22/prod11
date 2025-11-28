@@ -37,11 +37,11 @@ export const Navigation: React.FC = () => {
   const [city, setCity] = useState<string | undefined>();
 
   // Цена
-  const [minPriceRaw, setMinPriceRaw] = useState(5_000_000);
+  const [minPriceRaw, setMinPriceRaw] = useState(0);
   const [maxPriceRaw, setMaxPriceRaw] = useState(100_000_000);
   const minPrice = useDebounce(minPriceRaw, 400);
   const maxPrice = useDebounce(maxPriceRaw, 400);
-
+  
   // Получаем последний сегмент URL
   const getLastUrlSegment = (): string => {
     const segments = pathname.split('/').filter(Boolean);
@@ -66,8 +66,10 @@ export const Navigation: React.FC = () => {
       'rental-apartments': 'rental-apartments',
       'country-properties': 'country-properties',
     };
+    
     return map[segment] || 'new-building-apartments';
   };
+
 
   // Сборка URL
   const buildUrl = () => {
@@ -112,12 +114,18 @@ export const Navigation: React.FC = () => {
       x
     </button>
   );
-
+  const titles: Record<string, string> = {
+    'new-building-complexes': 'Новостройки',
+    'ready-apartments': 'Готовая недвижимость',
+    'rental-apartments': 'Аренда квартир',
+    'country-properties': 'Загородная недвижимость',
+    'commercial-properties': 'Коммерческая недвижимость',
+  };
   return (
     <div className={styles.navigation}>
       <div className={styles.container}>
-        <h2 className={styles.title}>Строительная компания</h2>
-
+        
+        <h1>{titles[getLastUrlSegment()]}</h1>
         <div className={styles.filters}>
 
           {/* Купить / Снять */}
@@ -204,14 +212,14 @@ export const Navigation: React.FC = () => {
             <div className={`${styles.priceSlider} ${priceSliderOpen ? styles.open : ''}`}>
               <div className={styles.sliderRow}>
                 <span className={styles.label}>От</span>
-                <input type="range" min="5000000" max="100000000" step="1000000" value={minPriceRaw}
+                <input type="range" min="5000000" max="0" step="1000000" value={minPriceRaw}
                   onChange={(e) => { const val = Number(e.target.value); if (val < maxPriceRaw) setMinPriceRaw(val); }}
                   className={styles.singleSlider} />
                 <output className={styles.value}>{formatPrice(minPriceRaw)}</output>
               </div>
               <div className={styles.sliderRow}>
                 <span className={styles.label}>До</span>
-                <input type="range" min="5000000" max="100000000" step="1000000" value={maxPriceRaw}
+                <input type="range" min="5000000" max="100000000" step="0" value={maxPriceRaw}
                   onChange={(e) => { const val = Number(e.target.value); if (val > minPriceRaw) setMaxPriceRaw(val); }}
                   className={styles.singleSlider} />
                 <output className={styles.value}>{formatPrice(maxPriceRaw)}</output>
