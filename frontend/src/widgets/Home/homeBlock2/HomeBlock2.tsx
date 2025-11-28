@@ -3,13 +3,13 @@ import React from 'react';
 import style from './HomeBlock2.module.scss';
 
 import fot1 from '../../../../public/new_building.png';
-import fot2 from '../../../../public/secondary_real_estate.png';
-import fot3 from '../../../../public/rental_real_estate.png';
-import fot4 from '../../../../public/ddd.png';
+import fot2 from '../../../../public/mena1.png';
+import fot3 from '../../../../public/mena2.png';
+import fot4 from '../../../../public/mena5.png';
 import fot5 from '../../../../public/country_real_estate.png';
 import fot6 from '../../../../public/mansion_real_estate.png';
-import fot7 from '../../../../public/sell.png';
-import fot8 from '../../../../public/rent.png';
+import fot7 from '../../../../public/mena3.png';
+import fot8 from '../../../../public/mena6.png';
 
 const items = [
   { img: fot1, title: 'Новостройки', accent: true },

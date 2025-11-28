@@ -26,6 +26,7 @@
 }
 
 .mainImageWrapper {
+  height: max-content;
   position: relative;
   border-radius: 16px;
   overflow: hidden;
@@ -163,7 +164,8 @@
 }
 
 .footer {
-  margin-top: auto;
+
+  margin-top: 25px;
 }
 
 .callButton {

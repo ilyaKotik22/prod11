@@ -33,6 +33,7 @@ export const ItemNBC: React.FC<ImmItemProps> = ({
   metro,
   metroDistance,
   path
+  
 
 }) => {
   

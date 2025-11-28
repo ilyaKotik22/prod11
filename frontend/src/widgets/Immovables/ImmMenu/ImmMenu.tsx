@@ -43,7 +43,10 @@ export const ImmMenu: React.FC = () => {
         area={apartment.area} 
         bedrooms={apartment.bedrooms} 
         floor={apartment.floor} 
-        totalFloors={apartment.totalFloors} metro={apartment.metro} key={apartment.id}   />
+        totalFloors={apartment.totalFloors} metro={apartment.metro} key={apartment.id} 
+        images={apartment.images}
+        />
+        
       ))}
     </ul>
   );
