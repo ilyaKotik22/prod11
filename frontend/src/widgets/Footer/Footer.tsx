@@ -2,8 +2,10 @@
 import React from 'react';
 import styles from './Footer.module.scss';
 import logo from '../../../public/Bez44ona3.png'; // замени на свой путь
+import { useNavigate } from 'react-router-dom';
 
 export const Footer: React.FC = () => {
+  const navigation = useNavigate()
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
@@ -16,12 +18,12 @@ export const Footer: React.FC = () => {
 
             <nav className={styles.nav}>
               <ul>
-                <li><a href="/">Агентство</a></li>
-                <li><a href="/">Застройщикам</a></li>
-                <li><a href="/">Партнёры и клиенты</a></li>
-                <li><a href="/">Вакансии</a></li>
-                <li><a href="/">Партнёрам</a></li>
-                <li><a href="/">Команда</a></li>
+                <li onClick={()=>navigation("/")}>Агентство</li>
+                <li onClick={()=>navigation("/")}><a href="/">Застройщикам</a></li>
+                <li onClick={()=>navigation("/")}><a href="/">Партнёры и клиенты</a></li>
+                <li onClick={()=>navigation("/")}><a href="/">Вакансии</a></li>
+                <li onClick={()=>navigation("/")}><a href="/">Партнёрам</a></li>
+                <li onClick={()=>navigation("/")}> <a href="/">Команда</a></li>
               </ul>
             </nav>
           </div>

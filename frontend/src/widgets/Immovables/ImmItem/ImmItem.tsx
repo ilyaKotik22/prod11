@@ -2,6 +2,7 @@ import React from 'react';
 import style from './ImmItem.module.scss';
 import fon1 from '../../../../public/1730058264-671e981802758_1.jpg.png';
 import fon2 from '../../../../public/Group 1395.png';
+import { useNavigate } from 'react-router-dom';
 
 export interface ImmItemProps {
   id: number;
@@ -50,10 +51,10 @@ export const ImmItem: React.FC<ImmItemProps> = ({
 
   // Определяем тип сделки для стилизации (по желанию)
   const isSale = price !== undefined && price > 0;
-
+  const navigate = useNavigate()
   return (
-    <li className={style.card}>
-      <a href={`/${currentPart}/${id}`}>
+    <li onClick={()=>navigate(`/${currentPart}/${id}`)} className={style.card}>
+      
         <img
           src={foto || fon1}
           alt={title}
@@ -109,7 +110,7 @@ export const ImmItem: React.FC<ImmItemProps> = ({
             )}
           </div>
         </div>
-      </a>
+      
     </li>
   );
 };

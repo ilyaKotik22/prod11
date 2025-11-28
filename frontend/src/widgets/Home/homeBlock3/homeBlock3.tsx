@@ -1,9 +1,11 @@
 import React from 'react';
 import styles from './homeBlock.module.scss';
 import fon1 from '../../../../public/team15.jpg'
+import { useNavigate } from 'react-router-dom';
 
 
 export const HomeBlock3: React.FC = () => {
+  const navigate = useNavigate()
   return (
     <section className={styles.block3}>
       {/* Текстовая часть */}
@@ -15,10 +17,10 @@ export const HomeBlock3: React.FC = () => {
           с лучшими сотрудниками компании.
         </div>
 
-        <button className={styles.btn}>
-          <a href="/team">
+        <button onClick={()=> navigate("/team")} className={styles.btn}>
+          
             наша команда
-          </a>
+          
         </button>
       </div>
 

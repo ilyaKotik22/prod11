@@ -28,21 +28,21 @@ export const Header: React.FC = () => {
                 </section>
                 <section className={style.rightHalf} >
                     <nav>
-                        <a href="">
+                        <div onClick={()=>navigate('/')}>
                             <img src={watsLogo} alt="" />
-                        </a>
-                        <a href="">
+                        </div>
+                        <div onClick={()=>navigate('/')}>
                             <img src={telegLogo} alt="" />
-                        </a>
-                        <a href="">+7 (960) 077-81-11 </a>
+                        </div>
+                        <div onClick={()=>navigate('/')}>+7 (960) 077-81-11 </div>
                         <button onClick={() => setPopupOpen(true)}>продать квартиру</button>
                     </nav>
                 </section>
                 <section className={style.onMobile}>
                     <div>
-                        <a href="/">
+                        <div onClick={()=>navigate('/')}>
                             <img src={logo} alt="logo" />
-                        </a>
+                        </div>
                         
                     </div>
                     <div style={{display: dropDownActive ? 'block' : 'none'}} className={style.dropdownMenu}>
@@ -59,22 +59,22 @@ export const Header: React.FC = () => {
                             
                         </div>
                         <div className="">
-                            <a href="/new-building-complexes">Новостроки</a>
+                            <div onClick={()=>navigate('/new-building-complexes')} >Новостроки</div>
                         </div>
                         <div className="">
-                            <a href="/ready-apartments">Готовые кварирвы</a>
+                            <div onClick={()=>navigate('/ready-apartments')}>Готовые кварирвы</div>
                         </div>
                         <div className="">
-                            <a href="/rental-apartments">Арендаквартир</a>
+                            <div onClick={()=>navigate('/rental-apartments')} >Арендаквартир</div>
                         </div>
                         <div className="">
-                            <a href="/country-properties">Загодная</a>
+                            <div onClick={()=>navigate('/country-properties')} >Загодная</div>
                         </div>
                         <div className="">
-                            <a href="/commercial-properties">Коммерческая</a>
+                            <div onClick={()=>navigate('/commercial-properties')} >Коммерческая</div>
                         </div>
                         <div className="">
-                            <a href="">Агенство</a>
+                            <div onClick={()=>navigate('/')}>Агенство</div>
                         </div>
                         <div className=""><button onClick={() => setPopupOpen(true)}>Заказать звонок</button></div>
                         

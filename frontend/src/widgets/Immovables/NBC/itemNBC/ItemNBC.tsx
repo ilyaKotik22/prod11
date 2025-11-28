@@ -2,6 +2,7 @@ import React from 'react';
 import style from '../../ImmItem/ImmItem.module.scss';
 
 import fon2 from '../../../../../public/Group 1395.png';
+import { useNavigate } from 'react-router-dom';
 
 export interface ImmItemProps {
   partUrl: number
@@ -35,10 +36,10 @@ export const ItemNBC: React.FC<ImmItemProps> = ({
 
 }) => {
   
-
+  const navigate = useNavigate()
   return (
-    <li className={style.card}>
-      <a href={`/${path}/${id}`}>
+    <li onClick={()=> navigate(`/${path}/${id}`)} className={style.card}>
+     
         <img src={foto} alt={title} className={style.image} />
 
         <div className={style.content}>
@@ -74,7 +75,7 @@ export const ItemNBC: React.FC<ImmItemProps> = ({
             </div>
           </div>
         </div>
-      </a>
+      
     </li>
   );
 };
