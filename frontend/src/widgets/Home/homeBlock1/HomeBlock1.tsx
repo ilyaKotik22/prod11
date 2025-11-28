@@ -5,7 +5,7 @@ export const HomeBlock1: React.FC = () => {
 return (
     <section className={styles.hero}>
         <div className={styles.background}></div>
-            <h1 className={styles.title}>СТРОИТЕЛЬНАЯ КОМПАНИЯ <b>PLATINA НЕДВИЖИМОСТЬ</b></h1>
+            <h1 style={{color: 'white'}} className={styles.title}>Агенство недвижимости <b>PLATINA</b></h1>
             <div className={styles.desc}>Помогаем людям купить квартиру и апартаменты в новых жилых комплексах центра Москвы, коммерческую недвижимость и особняки, а также дома в элитных посёлках Подмосковья.</div>
             <div className={styles.blocks}>
             <div className={styles.bot}>

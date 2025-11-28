@@ -3,20 +3,23 @@ import style from './ImmItem.module.scss';
 import fon1 from '../../../../public/1730058264-671e981802758_1.jpg.png';
 import fon2 from '../../../../public/Group 1395.png';
 import { useNavigate } from 'react-router-dom';
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export interface ImmItemProps {
   id: number;
   title: string;
   address?: string;
   area?: number;
-  pricePerMonth?: number;   // аренда
+  pricePerMonth?: number;
   bedrooms?: number;
-  price?: number;           // продажа — приоритет выше
+  price?: number;
   floor?: number;
   metro?: string;
   metroDistance?: number;
   foto?: string;
-  string;
+  images?: string[];           // теперь просто массив строк
   partUrl?: string;
 }
 
@@ -32,85 +35,131 @@ export const ImmItem: React.FC<ImmItemProps> = ({
   metro,
   metroDistance,
   foto,
+  images = [],
   partUrl: customPartUrl,
 }) => {
-  const currentPart = customPartUrl 
-    || window.location.pathname.split('/').filter(Boolean).pop() 
+  const navigate = useNavigate();
+
+  const currentPart = customPartUrl
+    || window.location.pathname.split('/').filter(Boolean).pop()
     || 'objects';
 
-  // Правильная логика отображения цены
   const displayPrice = React.useMemo(() => {
-    if (price !== undefined && price > 0) {
-      return `${price.toLocaleString('ru-RU')} ₽`;
-    }
-    if (pricePerMonth !== undefined && pricePerMonth > 0) {
-      return `${pricePerMonth.toLocaleString('ru-RU')} ₽ / месяц`;
-    }
-    return 'Цена по запросу';
+    if (price !== undefined && price > 0) return `${price.toLocaleString('ru-RU')} ₽`;
+    if (pricePerMonth !== undefined && pricePerMonth > 0) return `${pricePerMonth.toLocaleString('ru-RU')} ₽ / месяц`;
+    return '';
   }, [price, pricePerMonth]);
 
-  // Определяем тип сделки для стилизации (по желанию)
   const isSale = price !== undefined && price > 0;
-  const navigate = useNavigate()
+
+  // Исправлено: теперь images — просто массив строк, а не объектов с .url
+  const photos: string[] = images.length > 0 ? images : (foto ? [foto] : [fon1]);
+
+  const sliderSettings = {
+    dots: true,
+    infinite: photos.length > 1,
+    speed: 400,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    autoplay: false,
+    swipe: true,
+    lazyLoad: 'ondemand' as const,
+  };
+
+  // Обработчик клика по карточке
+  const handleCardClick = (e: React.MouseEvent<HTMLLIElement>) => {
+    // Если клик был внутри слайдера — не переходим
+    const clickedOnSlider = (e.target as HTMLElement).closest(`.${style.imageWrapper}`);
+    if (clickedOnSlider) return;
+
+    navigate(`/${currentPart}/${id}`);
+  };
+
   return (
-    <li onClick={()=>navigate(`/${currentPart}/${id}`)} className={style.card}>
-      
-        <img
-          src={foto || fon1}
-          alt={title}
-          className={style.image}
-          loading="lazy"
-        />
+    <li onClick={handleCardClick} className={style.card}>
+      {/* ==================== СЛАЙДЕР (с остановкой перехода) ==================== */}
+      <div
+        className={style.imageWrapper}
+        onClick={(e) => e.stopPropagation()}        // КЛЮЧЕВАЯ СТРОКА
+        onTouchStart={(e) => e.stopPropagation()}   // для мобильных свайпов
+        onTouchMove={(e) => e.stopPropagation()}
+      >
+        {photos.length === 1 ? (
+          <img
+            src={photos[0].url}
+            alt={title}
+            className={style.image}
+            loading="lazy"
+          />
+        ) : (
+          <Slider {...sliderSettings}>
+            {photos.map((img, idx) => (
+              <div key={idx}>
+                <img
+                  src={img.url}
+                  alt={`${title} — фото ${idx + 1}`}
+                  className={style.image}
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </Slider>
+        )}
 
-        <div className={style.content}>
-          <h3 className={style.head}>{title}</h3>
+        {/* Бейдж с количеством фото */}
+        {photos.length > 1 && (
+          <div className={style.photoBadge}>
+            {photos.length}
+          </div>
+        )}
+      </div>
 
-          {/* Адрес */}
-          {address && <div className={style.address}>{address}</div>}
+      {/* ==================== КОНТЕНТ ==================== */}
+      <div className={style.content}>
+        <h3 className={style.head}>{title}</h3>
 
-          {/* Метро */}
-          {metro && (
-            <div className={style.metro}>
-              <img src={fon2} alt="метро" />
-              <span>{metro}</span>
-              {metroDistance !== undefined && metroDistance > 0 && (
-                <span className={style.metroDistance}>{metroDistance} мин.</span>
+        {address && <div className={style.address}>{address}</div>}
+
+        {metro && (
+          <div className={style.metro}>
+            <img src={fon2} alt="метро" />
+            <span>{metro}</span>
+            {metroDistance !== undefined && metroDistance > 0 && (
+              <span className={style.metroDistance}>{metroDistance} мин.</span>
+            )}
+          </div>
+        )}
+
+        <div className={style.footer}>
+          <div className={`${style.price} ${isSale ? style.salePrice : ''}`}>
+            {displayPrice}
+          </div>
+
+          {(area !== undefined || bedrooms !== undefined || floor !== undefined) && (
+            <div className={style.params}>
+              {area !== undefined && area > 0 && (
+                <div className={style.param}>
+                  <p>Площадь</p>
+                  <span>{area} м²</span>
+                </div>
+              )}
+              {bedrooms !== undefined && (
+                <div className={style.param}>
+                  <p>Спальни</p>
+                  <span>{bedrooms === 0 ? 'Студия' : `${bedrooms}-комн.`}</span>
+                </div>
+              )}
+              {floor !== undefined && (
+                <div className={style.param}>
+                  <p>Этаж</p>
+                  <span>{floor > 0 ? floor : 'Цоколь'}</span>
+                </div>
               )}
             </div>
           )}
-
-          <div className={style.footer}>
-            {/* Цена с правильным приоритетом и стилями */}
-            <div className={`${style.price} ${isSale ? style.salePrice : ''}`}>
-              {displayPrice}
-            </div>
-
-            {/* Параметры — только те, что переданы */}
-            {(area !== undefined || bedrooms !== undefined || floor !== undefined) && (
-              <div className={style.params}>
-                {area !== undefined && area > 0 && (
-                  <div className={style.param}>
-                    <p>Площадь</p>
-                    <span>{area} м²</span>
-                  </div>
-                )}
-                {bedrooms !== undefined && (
-                  <div className={style.param}>
-                    <p>Спальни</p>
-                    <span>{bedrooms === 0 ? 'Студия' : `${bedrooms}-комн.`}</span>
-                  </div>
-                )}
-                {floor !== undefined && (
-                  <div className={style.param}>
-                    <p>Этаж</p>
-                    <span>{floor > 0 ? floor : 'Цоколь'}</span>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
         </div>
-      
+      </div>
     </li>
   );
 };

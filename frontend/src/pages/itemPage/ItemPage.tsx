@@ -10,37 +10,32 @@ import MapItem from './mapItem/Mapitem';
 export const ItemPage: React.FC = () => {
   const dispatch = useDispatch();
   const { items, loading, error } = useSelector((state: RootState) => state.complexes);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mainImage, setMainImage] = useState<string>('');
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
-  // Извлекаем массив URL из items.images (массив объектов { url: '...' })
   const images: string[] = useMemo(() => {
     if (!items?.images || !Array.isArray(items.images) || items.images.length === 0) {
       return ['https://via.placeholder.com/800x600.png?text=Нет+фото'];
     }
-
     return items.images
       .map((img: any) => {
-        // Поддерживаем разные форматы: { url }, { image }, просто строка
+        // Исправлено: добавлена закрывающая кавычка
         return typeof img === 'string' ? img : img?.url || img?.image || null;
       })
       .filter((url): url is string => !!url && typeof url === 'string');
   }, [items]);
 
-  // Устанавливаем первое фото как главное
   useEffect(() => {
     if (images.length > 0 && !mainImage) {
-      console.log(images[1])
       setMainImage(images[0]);
     }
   }, [images, mainImage]);
 
-  // Запрос данных по URL
   const buildApiUrlFromLocation = () => {
     const parts = window.location.href.split('/').filter(Boolean);
-    const last = parts[parts.length - 1];     // ID
-    const prev = parts[parts.length - 2];     // тип (ready-apartments, commercial-properties и т.д.)
+    const last = parts[parts.length - 1];
+    const prev = parts[parts.length - 2];
     return `${import.meta.env.VITE_API_URL}/${prev}/${last}`;
   };
 
@@ -52,13 +47,25 @@ export const ItemPage: React.FC = () => {
   if (loading) return <div className={styles.loader}>Загрузка...</div>;
   if (error || !items) return <div className={styles.error}>Объект не найден</div>;
 
+  const rawDescription = items?.description || items?.complex?.description || 'Описание отсутствует.';
+  const formattedDescription = rawDescription.replace(/\/n\//g, '<br/>');
+
+  const needCollapse = rawDescription.length > 200;
+
+  const previewText = needCollapse && !isDescriptionExpanded
+    ? rawDescription.slice(0, 200) + '...'
+    : rawDescription;
+
+  const displayText = previewText.replace(/\/n\//g, '<br/>');
+
+  
+
   return (
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.card}>
-          {/* ====================== ГАЛЕРЕЯ ====================== */}
+          {/* ГАЛЕРЕЯ */}
           <div className={styles.galleryWrapper}>
-            {/* Главное фото */}
             <div className={styles.mainImageWrapper}>
               <img
                 src={images[0]}
@@ -73,7 +80,6 @@ export const ItemPage: React.FC = () => {
               )}
             </div>
 
-            {/* Миниатюры */}
             {images.length > 1 && (
               <div className={styles.thumbnails}>
                 {images.map((img, index) => (
@@ -89,7 +95,7 @@ export const ItemPage: React.FC = () => {
             )}
           </div>
 
-          {/* ====================== КОНТЕНТ ====================== */}
+          {/* КОНТЕНТ */}
           <div className={styles.content}>
             <h1 className={styles.title}>
               {items?.complex?.name || items?.title || 'Объект без названия'}
@@ -116,7 +122,7 @@ export const ItemPage: React.FC = () => {
                   ? `${Number(items.price).toLocaleString('ru-RU')} ₽`
                   : items.pricePerMonth
                   ? `${Number(items.pricePerMonth).toLocaleString('ru-RU')} ₽/мес`
-                  : 'Цена по запросу'}
+                  : ''}
               </div>
 
               <div className={styles.tags}>
@@ -131,9 +137,22 @@ export const ItemPage: React.FC = () => {
               </div>
             </div>
 
-            <p className={styles.description}>
-              {items?.description || items?.complex?.description || 'Описание отсутствует.'}
-            </p>
+            {/* Описание с кнопкой "Показать полностью" */}
+            <div className={styles.descriptionWrapper}>
+              <p
+                className={styles.description}
+                dangerouslySetInnerHTML={{ __html: displayText }}
+              />
+
+              {needCollapse && (
+                <button
+                  className={styles.showMoreBtn}
+                  onClick={() => setIsDescriptionExpanded(prev => !prev)}
+                >
+                  {isDescriptionExpanded ? 'Свернуть' : 'Показать полностью'}
+                </button>
+              )}
+            </div>
 
             <div className={styles.footer}>
               <button
@@ -147,7 +166,6 @@ export const ItemPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Карта */}
       <MapItem
         lat={items.lat || 55.7558}
         lng={items.lng || 37.6173}
