@@ -52,6 +52,15 @@ button{
 h3{
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0);
 }
+/* ГЛАВНОЕ ИСПРАВЛЕНИЕ */
+html {
+  scroll-padding-top: 0 !important;
+}
+
+/* И самое важное — отключаем восстановление скролла */
+html, body {
+  overflow-anchor: none;
+}
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;

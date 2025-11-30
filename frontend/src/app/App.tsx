@@ -6,7 +6,9 @@ import { Header } from "../widgets/Header/Header"
 import { Footer } from "../widgets/Footer/Footer"
 
 
+
 function App() {
+
   return (
     <>
       <BrowserRouter>

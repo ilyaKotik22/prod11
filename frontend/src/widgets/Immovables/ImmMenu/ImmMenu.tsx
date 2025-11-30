@@ -1,39 +1,58 @@
-import React, { useEffect } from 'react';
+// src/widgets/Immovables/ImmMenu/ImmMenu.tsx
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../../app/store';
 import { fetchApartments } from './store/store';
 import { ImmItem } from '../ImmItem/ImmItem';
-import styles from './ImmMenu.module.scss'
-type ape ={
-            id: 10,
-            title: string,
-            address: string,
-            area: number,
-            pricePerMonth: number,
-            bedrooms: number,
-            floor: number,
-            totalFloors: number,
-            metro: string,
-            metroDistance: number,
-            description: string,
-            createdAt: "2025-11-24T19:00:55.528Z",
-            updatedAt: "2025-11-24T19:00:55.528Z",
-            images?: []
-}
+import styles from './ImmMenu.module.scss';
+
+const PAGE_SIZE = 9; // Сколько показываем за раз
+
 export const ImmMenu: React.FC = () => {
-
-
+  const dispatch = useDispatch();
   const { items, loading } = useSelector((state: RootState) => state.complexes);
 
-  console.log(items)
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const observerRef = useRef<HTMLDivElement>(null);
 
-  if (loading) return <p>Загрузка...</p>;
+  // Загружаем данные при монтировании
+  useEffect(() => {
+    dispatch(fetchApartments() as any);
+  }, [dispatch]);
+
+  // Intersection Observer — когда юзер долистал до "триггера" → подгружаем ещё"
+  useEffect(() => {
+    if (!observerRef.current || loading || !items?.data) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && visibleCount < items.data.length) {
+          setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, items.data.length));
+        }
+      },
+      { threshold: 0.1, rootMargin: '100px' }
+    );
+
+    observer.observe(observerRef.current);
+
+    return () => observer.disconnect();
+  }, [items?.data, loading, visibleCount]);
+
+  if (loading && visibleCount === PAGE_SIZE) {
+    return <div className={styles.loader}>Загрузка...</div>;
+  }
+
+  if (!items?.data || items.data.length === 0) {
+    return <div className={styles.empty}>Ничего не найдено</div>;
+  }
+
+  const visibleItems = items.data.slice(0, visibleCount);
 
   return (
-    <ul>
-      
-      {items.data && items.data.map((apartment:ape) => (
-        <ImmItem 
+    <div className={styles.menu}>
+      <div className={styles.grid}>
+        {visibleItems.map((apartment) => (
+          <ImmItem 
         price={apartment.price && apartment.price}
         foto={apartment.images[0]?.url}
         id={apartment.id} 
@@ -46,8 +65,22 @@ export const ImmMenu: React.FC = () => {
         totalFloors={apartment.totalFloors} metro={apartment.metro} key={apartment.id} 
         images={apartment.images}
         />
-        
-      ))}
-    </ul>
+        ))}
+      </div>
+
+      {/* Триггер для подгрузки */}
+      {visibleCount < items.data.length && (
+        <div ref={observerRef} className={styles.loaderTrigger}>
+          {loading ? 'Загружаем ещё...' : 'Прокрутите вниз'}
+        </div>
+      )}
+
+      {/* Если всё подгрузили — показываем сообщение */}
+      {visibleCount >= items.data.length && items.data.length > PAGE_SIZE && (
+        <div className={styles.endMessage}>Больше объектов нет</div>
+      )}
+    </div>
   );
 };
+
+

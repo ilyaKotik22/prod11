@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styles from './Modal.module.scss';
 import fon1 from '../../../../public/vertikal-nyi-snimok-belogo-zdania-pod-cistym-nebom-no-bg-preview (carve.photos) 1.png';
 import { sendLead } from '../../../features/LeadApi/LeadApi';
+import { useNavigate } from 'react-router-dom';
 
 interface CallModalProps {
   isOpen: boolean;
@@ -10,6 +11,7 @@ interface CallModalProps {
 }
 
 export const CallModal: React.FC<CallModalProps> = ({ isOpen, onClose }) => {
+  const navigate = useNavigate()
   // Состояния инпутов
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -57,7 +59,7 @@ export const CallModal: React.FC<CallModalProps> = ({ isOpen, onClose }) => {
         propertyId,
       });
 
-      alert('Спасибо! Мы свяжемся с вами в ближайшее время.');
+      
       setName('');
       setPhone('');
       onClose();
@@ -67,6 +69,7 @@ export const CallModal: React.FC<CallModalProps> = ({ isOpen, onClose }) => {
     } finally {
       setIsSubmitting(false);
     }
+    navigate('/buy');
   };
 
   return (

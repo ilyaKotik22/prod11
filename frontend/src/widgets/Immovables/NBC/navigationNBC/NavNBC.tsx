@@ -67,7 +67,7 @@ export const NavNBC: React.FC = () => {
   );
 
   return (
-    <div className={styles.navNBC}>
+    <div style={{marginBottom: '50px'}} className={styles.navNBC}>
       <div className={styles.container}>
         <div className={styles.filters}>
 
@@ -99,7 +99,7 @@ export const NavNBC: React.FC = () => {
             </button>
             {bedroomsOpen && (
               <ul className={styles.menu}>
-                {['Студия', '1', '2', '3', '4+'].map(item => (
+                {['Студия', '1', '2', '3', '4','5','6','7','8'].map(item => (
                   <li key={item} onClick={() => { dispatch(setBedrooms(item)); setBedroomsOpen(false); }}>
                     {item}
                   </li>

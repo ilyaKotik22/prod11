@@ -1,7 +1,7 @@
 // NBCcomponent.module.scss
 
 .NBCc {
-  padding: 140px 20px 100px;
+  padding: 180px 20px 100px;
   color: white;
   min-height: 100vh;
 }
@@ -88,7 +88,7 @@ h1 {
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 32px;
+  gap: 20px;
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));

@@ -2,6 +2,7 @@
 import React, { useState, FormEvent } from 'react';
 import styles from './HeaderPopup.module.scss';
 import { connectApi } from '../../../features/ConnectApi/ConnectApi';
+import { useNavigate } from 'react-router-dom';
 
 interface HeaderCallPopupProps {
   isOpen: boolean;
@@ -14,6 +15,8 @@ export const HeaderCallPopup: React.FC<HeaderCallPopupProps> = ({ isOpen, onClos
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
+
+  const navigate = useNavigate()
   if (!isOpen) return null;
 
   const handleSubmit = async (e: FormEvent) => {
@@ -34,7 +37,7 @@ export const HeaderCallPopup: React.FC<HeaderCallPopupProps> = ({ isOpen, onClos
         propertyType: 'продажа', // ← всегда "продажа", как ты просил
       });
 
-      alert('Заявка отправлена! Скоро с вами свяжемся');
+      
       setName('');
       setPhone('');
       onClose();
@@ -42,7 +45,9 @@ export const HeaderCallPopup: React.FC<HeaderCallPopupProps> = ({ isOpen, onClos
       console.error('Ошибка отправки:', err);
       setError('Не удалось отправить заявку. Попробуйте позже.');
     } finally {
+      navigate('/buy')
       setIsSubmitting(false);
+      
     }
   };
 

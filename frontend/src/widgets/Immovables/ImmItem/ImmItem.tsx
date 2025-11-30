@@ -56,7 +56,7 @@ export const ImmItem: React.FC<ImmItemProps> = ({
   const photos: string[] = images.length > 0 ? images : (foto ? [foto] : [fon1]);
 
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: photos.length > 1,
     speed: 400,
     slidesToShow: 1,
