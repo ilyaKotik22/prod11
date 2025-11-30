@@ -1,5 +1,5 @@
 .main {
-  min-height: 100vh;
+  
   background: #0e0e10;
   color: #fff;
   font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -40,6 +40,7 @@
   object-fit: cover;
   display: block;
   transition: opacity 0.3s ease;
+  max-height: 350px;
 }
 
 .photoCounter {
@@ -64,6 +65,7 @@
   overflow-y: auto;
   max-height: 640px;
   padding-right: 8px;
+  min-height: 50px;
 
   &::-webkit-scrollbar {
     width: 6px;
@@ -89,6 +91,7 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.4s ease;
+    min-height: 30px;
   }
 
   &:hover img {
@@ -107,6 +110,10 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 20px 0;
+
+  *{
+    vertical-align: top;
+  }
 }
 
 .title {

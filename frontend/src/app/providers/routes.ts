@@ -22,6 +22,11 @@ export const MyRoutes = [
         component: HomePage
     },
     {
+        url: '/buy',
+        component: BuyPage
+    },
+    
+    {
         url: '/blog',
         component: BlogPage
     },
@@ -31,7 +36,7 @@ export const MyRoutes = [
     },
     {
         url: '/ready-apartments',
-        component: BuyPage
+        component: ImmovablesPage
     },
     {
         url: '/ready-apartments/:id',

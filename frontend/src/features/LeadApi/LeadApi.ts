@@ -1,3 +1,5 @@
+
+
 // utils/sendLead.ts
 interface LeadData {
   name: string;
@@ -29,6 +31,7 @@ export const sendLead = async (data: LeadData): Promise<void> => {
     console.log('Лид успешно отправлен на бэкенд!');
   } catch (error: any) {
     console.error('Запрос вообще не ушёл (CORS, сеть и т.д.):', error);
+    
     throw error;
   }
 };

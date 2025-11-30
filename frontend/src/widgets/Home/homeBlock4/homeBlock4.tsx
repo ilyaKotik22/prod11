@@ -76,7 +76,7 @@ export const HomeBlock4: React.FC = () => {
           <div className={styles.shiftCard}>
             <img src={fon4} alt="Shift" className={styles.shiftMainImg} />
             <div className={styles.shiftOverlay}>
-              <img src={fon5} alt="Shift logo" className={styles.shiftLogo} />
+              
               <div className={styles.shiftInfo}>
                 <span className={styles.tag}>Жилой комплекс</span>
                 <h1><b>Level Нагатино</b></h1>
