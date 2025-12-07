@@ -8,7 +8,7 @@ interface ConnectData {
 }
 
 export const connectApi = async (data: ConnectData): Promise<void> => {
-  console.log('Отправляем заявку:', data);
+  // console.log('Отправляем заявку:', data);
 
   try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/lead`, {

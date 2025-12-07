@@ -31,6 +31,9 @@ export const NavNBC: React.FC = () => {
   const minPrice = useDebounce(minPriceRaw, 400);
   const maxPrice = useDebounce(maxPriceRaw, 400);
 
+
+  
+
   // Синхронизация с глобальным стейтом
   React.useEffect(() => {
     dispatch(setPriceRange({ min: minPrice, max: maxPrice }));

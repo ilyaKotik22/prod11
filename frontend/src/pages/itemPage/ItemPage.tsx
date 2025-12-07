@@ -1,7 +1,7 @@
 // src/pages/ItemPage/ItemPage.tsx
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchApartments } from '../../widgets/Immovables/ImmMenu/store/store';
+import { fetchApartments, setDefaultTake } from '../../widgets/Immovables/ImmMenu/store/store';
 import type { RootState } from '../../app/store';
 import styles from './ItemPage.module.scss';
 import { CallModal } from './ModalComp/ModalComp';
@@ -10,7 +10,9 @@ import MapItem from './mapItem/Mapitem';
 export const ItemPage: React.FC = () => {
   const dispatch = useDispatch();
   const { items, loading, error } = useSelector((state: RootState) => state.complexes);
-
+  useEffect(()=>{
+    dispatch(setDefaultTake())
+  },[])
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = React.useState(false);
 

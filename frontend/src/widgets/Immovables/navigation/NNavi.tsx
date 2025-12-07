@@ -42,7 +42,7 @@ if (realtyType ) params.set('type', realtyType);
 // Купить/Снять
 if (buyType ) params.set('action', buyType);
 
-console.log(`${import.meta.env.BASE_URL}/${lastPart}/?${params.toString()}`)
+// console.log(`${import.meta.env.BASE_URL}/${lastPart}/?${params.toString()}`)
 
 return `${import.meta.env.BASE_URL}/${lastPart}/?${params.toString()}`;
 };
