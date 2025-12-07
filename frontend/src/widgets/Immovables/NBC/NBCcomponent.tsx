@@ -3,10 +3,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { getPathSegments } from '../../../shared/getParams/getParams';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../../app/store';
-import { fetchApartments } from '../ImmMenu/store/store';
+import { fetchApartments, setTake } from '../ImmMenu/store/store';
 import styles from './NBCcomponent.module.scss';
 import { ItemNBC } from './itemNBC/ItemNBC';
 import { NavNBC } from './navigationNBC/NavNBC';
+
+// Предполагаемое действие — подключи своё настоящее, если название другое
+ // или где у тебя хранится complex.take
 
 const PAGE_SIZE = 9; // сколько показывать за раз
 
@@ -25,17 +28,18 @@ export const NBCcomponent: React.FC = () => {
   const [Category, setCategory] = useState<string[]>([]);
   const [chooseCategory, setChooseCategory] = useState<string | undefined>(undefined);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-
   const dispatch = useDispatch();
+  const takeSelector = useSelector((state:RootState)=> state.complexes.take)
+
   const { items } = useSelector((state: RootState) => state.complexes);
   const filter = useSelector((state: RootState) => state.filterNBC);
-
   const observerRef = useRef<HTMLDivElement>(null);
 
   // Загрузка данных по URL
   useEffect(() => {
     const params = getPathSegments();
-    const finalUrl = `${import.meta.env.VITE_API_URL}/${params.type}/${params.id}`;
+    const finalUrl = `${import.meta.env.VITE_API_URL}/${params.type}/${params.id}?take=${takeSelector}`;
+    // console.log(finalUrl)
     dispatch(fetchApartments(finalUrl) as any);
   }, [dispatch]);
 
@@ -66,14 +70,20 @@ export const NBCcomponent: React.FC = () => {
       return true;
     }) || [];
 
-  // Подгрузка при скролле до конца
+  // Подгрузка при скролле до конца — только увеличиваем complex.take на +12
   useEffect(() => {
     if (!observerRef.current) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && visibleCount < filteredApartments.length) {
-          setVisibleCount(prev => Math.min(prev + PAGE_SIZE, filteredApartments.length));
+        if (entry.isIntersecting) {
+          // Вот единственное новое действие — увеличиваем take на 12
+          dispatch(setTake()); // если у тебя другое действие — замени на своё, например: incrementTake(12)
+          
+          // Оставляем старую логику подгрузки видимых элементов (по 9)
+          if (visibleCount < filteredApartments.length) {
+            setVisibleCount(prev => Math.min(prev + PAGE_SIZE, filteredApartments.length));
+          }
         }
       },
       { rootMargin: '150px' }
@@ -81,7 +91,7 @@ export const NBCcomponent: React.FC = () => {
 
     observer.observe(observerRef.current);
     return () => observer.disconnect();
-  }, [filteredApartments.length, visibleCount]);
+  }, [dispatch, filteredApartments.length, visibleCount]);
 
   // Сброс подгрузки при смене фильтров
   useEffect(() => {
@@ -95,9 +105,7 @@ export const NBCcomponent: React.FC = () => {
     <div className="container">
       <section className={styles.NBCc}>
         <h1>{items?.name || 'Загрузка...'}</h1>
-
         <NavNBC />
-
         <ul className={styles.grid}>
           {visibleApartments.map(apartment => (
             <ItemNBC

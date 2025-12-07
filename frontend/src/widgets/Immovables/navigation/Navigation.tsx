@@ -1,10 +1,11 @@
 // src/widgets/Immovables/navigation/Navigation.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './Navigation.module.scss';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchApartments } from '../ImmMenu/store/store';
 import { useDebounce } from '../../../shared/debounce/debounce';
 import { useLocation } from 'react-router-dom';
+import type { RootState } from '../../../app/store';
 
 const formatPrice = (value: number): string => {
   if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(1)} млрд`;
@@ -14,6 +15,7 @@ const formatPrice = (value: number): string => {
 
 export const Navigation: React.FC = () => {
   const dispatch = useDispatch();
+  const takeSelector = useSelector((state: RootState) => state.complexes.take);
   const { pathname } = useLocation();
   const priceWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -27,9 +29,9 @@ export const Navigation: React.FC = () => {
   const [realtyType, setRealtyType] = useState<string | undefined>();
   const [bedrooms, setBedrooms] = useState<string | undefined>();
   const [city, setCity] = useState<string | undefined>();
-
-  const [minPriceRaw, setMinPriceRaw] = useState(1_00_000);
+  const [minPriceRaw, setMinPriceRaw] = useState(100_000);     // исправил на реалистичное значение
   const [maxPriceRaw, setMaxPriceRaw] = useState(100_000_000);
+
   const minPrice = useDebounce(minPriceRaw, 400);
   const maxPrice = useDebounce(maxPriceRaw, 400);
 
@@ -60,6 +62,10 @@ export const Navigation: React.FC = () => {
 
   const buildUrl = () => {
     const params = new URLSearchParams();
+
+    // Обязательный take
+    params.set('take', takeSelector.toString());
+
     if (minPrice > 1_000_000) params.set('minPrice', minPrice.toString());
     if (maxPrice < 100_000_000) params.set('maxPrice', maxPrice.toString());
     if (bedrooms) {
@@ -72,13 +78,15 @@ export const Navigation: React.FC = () => {
     const query = params.toString();
     const path = getApiPath();
     const base = import.meta.env.VITE_API_URL;
-    console.log(query ? `${base}/${path}?${query}` : `${base}/${path}`)
+
+    // console.log(query ? `${base}/${path}?${query}` : `${base}/${path}`);
+
     return query ? `${base}/${path}?${query}` : `${base}/${path}`;
   };
 
   useEffect(() => {
     dispatch(fetchApartments(buildUrl()) as any);
-  }, [buyType, realtyType, bedrooms, city, minPrice, maxPrice]);
+  }, [buyType, realtyType, bedrooms, city, minPrice, maxPrice, takeSelector]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -107,10 +115,9 @@ export const Navigation: React.FC = () => {
   };
 
   const displayedBedroomsValue = isCountryProperties && bedrooms === 'Студия' ? 'Участок' : bedrooms;
-
   const bedroomsOptions = isCountryProperties
-    ? ['Участок', '1', '2', '3', '4','5','6','7','8']
-    : ['Студия', '1', '2', '3', '4','5','6','7','8'];
+    ? ['Участок', '1', '2', '3', '4', '5', '6', '7', '8']
+    : ['Студия', '1', '2', '3', '4', '5', '6', '7', '8'];
 
   return (
     <div className={styles.navigation}>
@@ -118,7 +125,8 @@ export const Navigation: React.FC = () => {
         <h1>{titles[getLastUrlSegment()]}</h1>
 
         <div className={styles.filters}>
-          {/* Купить / Снять */}
+
+          {/* 1. Купить / Снять */}
           <div className={styles.dropdown}>
             <button className={styles.trigger} onClick={() => setBuyOpen(v => !v)}>
               <span>{buyType || 'Купить / Снять'}</span>
@@ -133,7 +141,7 @@ export const Navigation: React.FC = () => {
             )}
           </div>
 
-          {/* Тип недвижимости */}
+          {/* 2. Тип недвижимости */}
           <div className={styles.dropdown}>
             <button className={styles.trigger} onClick={() => setRealtyOpen(v => !v)}>
               <span>{realtyType || 'Тип недвижимости'}</span>
@@ -167,7 +175,7 @@ export const Navigation: React.FC = () => {
             )}
           </div>
 
-          {/* Спальни — Участок вместо Студия на загородке */}
+          {/* 3. Спальни */}
           <div className={styles.dropdown}>
             <button className={styles.trigger} onClick={() => setBedroomsOpen(v => !v)}>
               <span>{displayedBedroomsValue || 'Спальни'}</span>
@@ -192,7 +200,7 @@ export const Navigation: React.FC = () => {
             )}
           </div>
 
-          {/* ЦЕНА */}
+          {/* 4. Цена */}
           <div className={styles.priceSliderWrapper} ref={priceWrapperRef}>
             <button className={styles.trigger} onClick={() => setPriceSliderOpen(v => !v)}>
               <span>
@@ -205,6 +213,7 @@ export const Navigation: React.FC = () => {
               )}
               <span className={styles.arrow}>▼</span>
             </button>
+
             <div className={`${styles.priceSlider} ${priceSliderOpen ? styles.open : ''}`}>
               <div className={styles.sliderRow}>
                 <span className={styles.label}>От</span>
@@ -226,7 +235,7 @@ export const Navigation: React.FC = () => {
                 <span className={styles.label}>До</span>
                 <input
                   type="range"
-                  min="5000000"
+                  min="100000"
                   max="100000000"
                   step="1000000"
                   value={maxPriceRaw}
@@ -241,7 +250,7 @@ export const Navigation: React.FC = () => {
             </div>
           </div>
 
-          {/* Город */}
+          {/* 5. Город */}
           <div className={styles.dropdown}>
             <button className={styles.trigger} onClick={() => setCityOpen(v => !v)}>
               <span>{city || 'Город'}</span>
@@ -258,6 +267,7 @@ export const Navigation: React.FC = () => {
               </ul>
             )}
           </div>
+
         </div>
       </div>
     </div>

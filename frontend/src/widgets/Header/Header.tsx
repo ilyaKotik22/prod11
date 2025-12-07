@@ -18,8 +18,8 @@ export const Header: React.FC = () => {
                         <div onClick={()=>navigate('/')}>
                             <img src={logo} alt="logo" />
                         </div>
-                        <div onClick={()=>navigate('/new-building-complexes')} >Новостроки</div>
-                        <div onClick={()=>navigate('/ready-apartments')} >Готовые кварирвы</div>
+                        <div onClick={()=>navigate('/new-building-complexes')} >Новостройки</div>
+                        <div onClick={()=>navigate('/ready-apartments')} >Готовые квартирвы</div>
                         <div onClick={()=>navigate('/rental-apartments')}>Арендаквартир</div>
                         <div onClick={()=>navigate('/country-properties')} >Загородная</div>
                         <div onClick={()=>navigate('/commercial-properties')}>Коммерческая</div>
@@ -59,10 +59,10 @@ export const Header: React.FC = () => {
                             
                         </div>
                         <div className="">
-                            <div onClick={()=>navigate('/new-building-complexes')} >Новостроки</div>
+                            <div onClick={()=>navigate('/new-building-complexes')} >Новостройки</div>
                         </div>
                         <div className="">
-                            <div onClick={()=>navigate('/ready-apartments')}>Готовые кварирвы</div>
+                            <div onClick={()=>navigate('/ready-apartments')}>Готовые квартирвы</div>
                         </div>
                         <div className="">
                             <div onClick={()=>navigate('/rental-apartments')} >Арендаквартир</div>

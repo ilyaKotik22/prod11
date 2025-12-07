@@ -12,12 +12,14 @@ export interface Apartment {
 }
 
 export interface ApartmentsState {
+  take: number,
   items: Apartment[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ApartmentsState = {
+  take: 12,
   items: [],
   loading: false,
   error: null,
@@ -34,7 +36,7 @@ export const fetchApartments = (url: string) => async (dispatch: any) => {
     const res = await fetch(url);
     
     const data = await res.json();
-    console.log(data)
+    // console.log(data)
     dispatch(fetchApartmentsSuccess(data )); // если API отдаёт {data:[]}
   } catch (e: any) {
     dispatch(fetchApartmentsError(e.message));
@@ -77,6 +79,12 @@ export const apartmentsSlice = createSlice({
     addApartment(state, action: PayloadAction<Apartment>) {
       state.items.push(action.payload);
     },
+    setDefaultTake(state){
+      state.take = 12
+    },
+    setTake(state){
+      state.take = state.take + 12
+    }
   },
 });
 
@@ -85,6 +93,8 @@ export const {
   fetchApartmentsSuccess,
   fetchApartmentsError,
   addApartment,
+  setTake,
+  setDefaultTake,
 } = apartmentsSlice.actions;
 
 export default apartmentsSlice.reducer;
