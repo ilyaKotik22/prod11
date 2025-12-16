@@ -52,12 +52,7 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Нижняя строка */}
-        <div className={styles.bottom}>
-          <p>
-            Мы используем файлы cookie. Продолжая работу с сайтом, Вы подтверждаете, что ознакомлены с политикой в отношении обработки персональных данных.
-          </p>
-          <button className={styles.acceptBtn}>Принять</button>
-        </div>
+       
       </div>
     </footer>
   );

@@ -1,4 +1,3 @@
-// src/widgets/Immovables/navigation/Navigation.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './Navigation.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,13 +23,18 @@ export const Navigation: React.FC = () => {
   const [bedroomsOpen, setBedroomsOpen] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
   const [priceSliderOpen, setPriceSliderOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false); // новый дропдаун
 
   const [buyType, setBuyType] = useState<string | undefined>();
   const [realtyType, setRealtyType] = useState<string | undefined>();
   const [bedrooms, setBedrooms] = useState<string | undefined>();
   const [city, setCity] = useState<string | undefined>();
-  const [minPriceRaw, setMinPriceRaw] = useState(10_000);     // исправил на реалистичное значение
+  const [minPriceRaw, setMinPriceRaw] = useState(10_000);
   const [maxPriceRaw, setMaxPriceRaw] = useState(100_000_000);
+
+  // Новые состояния для сортировки
+  const [orderBy, setOrderBy] = useState<'price' | 'bedrooms' | undefined>(undefined);
+  const [orderDir, setOrderDir] = useState<'asc' | 'desc' | undefined>(undefined);
 
   const minPrice = useDebounce(minPriceRaw, 400);
   const maxPrice = useDebounce(maxPriceRaw, 400);
@@ -63,7 +67,6 @@ export const Navigation: React.FC = () => {
   const buildUrl = () => {
     const params = new URLSearchParams();
 
-    // Обязательный take
     params.set('take', takeSelector.toString());
 
     if (minPrice > 1_000_000) params.set('minPrice', minPrice.toString());
@@ -75,20 +78,26 @@ export const Navigation: React.FC = () => {
     if (buyType) params.set('action', buyType);
     if (city) params.set('city', city);
 
+    // Добавляем сортировку
+    if (orderBy) params.set('orderBy', orderBy);
+    if (orderDir) params.set('order', orderDir);
+
     const query = params.toString();
     const path = getApiPath();
     const base = import.meta.env.VITE_API_URL;
-
-    // console.log(query ? `${base}/${path}?${query}` : `${base}/${path}`);
-
+    console.log(`${base}/${path}?${query}`)
     return query ? `${base}/${path}?${query}` : `${base}/${path}`;
   };
+
+  // Сброс пагинации при изменении ЛЮБОГО фильтра, включая сортировку
   useEffect(() => {
-    dispatch(setDefaultTake())
-  }, [buyType, realtyType, bedrooms, city, minPrice, maxPrice,])
+    dispatch(setDefaultTake());
+  }, [buyType, realtyType, bedrooms, city, minPrice, maxPrice, orderBy, orderDir]);
+
+  // Загрузка данных
   useEffect(() => {
     dispatch(fetchApartments(buildUrl()) as any);
-  }, [buyType, realtyType, bedrooms, city, minPrice, maxPrice, takeSelector]);
+  }, [buyType, realtyType, bedrooms, city, minPrice, maxPrice, orderBy, orderDir, takeSelector]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -121,13 +130,21 @@ export const Navigation: React.FC = () => {
     ? ['Участок', '1', '2', '3', '4', '5', '6', '7', '8']
     : ['Студия', '1', '2', '3', '4', '5', '6', '7', '8'];
 
+  // Отображаемый текст сортировки
+  const sortDisplayText = orderBy
+    ? orderBy === 'price'
+      ? 'Цена'
+      : 'Спальни'
+    : 'Сортировать по';
+
+  const sortDirectionText = orderDir === 'asc' ? '↑ по возрастанию' : orderDir === 'desc' ? '↓ по убыванию' : '';
+
   return (
     <div className={styles.navigation}>
       <div className={styles.container}>
         <h1>{titles[getLastUrlSegment()]}</h1>
 
         <div className={styles.filters}>
-
           {/* 1. Купить / Снять */}
           <div className={styles.dropdown}>
             <button className={styles.trigger} onClick={() => setBuyOpen(v => !v)}>
@@ -142,9 +159,6 @@ export const Navigation: React.FC = () => {
               </ul>
             )}
           </div>
-
-          {/* 2. Тип недвижимости */}
-       
 
           {/* 3. Спальни */}
           <div className={styles.dropdown}>
@@ -191,8 +205,8 @@ export const Navigation: React.FC = () => {
                 <input
                   type="range"
                   min="10000"
-                  max="10000000"
-                  step="10000"
+                  max="100000000"
+                  step="100000"
                   value={minPriceRaw}
                   onChange={(e) => {
                     const val = Number(e.target.value);
@@ -236,6 +250,50 @@ export const Navigation: React.FC = () => {
                   </li>
                 ))}
               </ul>
+            )}
+          </div>
+
+          {/* НОВЫЙ ФИЛЬТР: Сортировка */}
+          <div className={styles.dropdown}>
+            <button className={styles.trigger} onClick={() => setSortOpen(v => !v)}>
+              <span>
+                {sortDisplayText}
+                {orderDir && <small style={{ marginLeft: '6px', opacity: 0.8 }}>{sortDirectionText}</small>}
+              </span>
+              {(orderBy || orderDir) && (
+                <ResetButton onClick={(e) => {
+                  e.stopPropagation();
+                  setOrderBy(undefined);
+                  setOrderDir(undefined);
+                }} />
+              )}
+              <span className={styles.arrow}>▼</span>
+            </button>
+
+            {sortOpen && (
+              <div className={styles.complexMenu} style={{ padding: '12px' }}>
+                <div style={{ marginBottom: '12px' }}>
+                  <strong>Поле сортировки:</strong>
+                  <ul className={styles.menu} style={{ marginTop: '8px' }}>
+                    <li onClick={() => { setOrderBy(pathname ==='rental-apartments' ? 'price' : 'pricePerMonth' ); }}>Цена</li>
+                    <li onClick={() => { setOrderBy('bedrooms'); }}>Спальни</li>
+                  </ul>
+                </div>
+
+                {orderBy && (
+                  <div>
+                    <strong>Направление:</strong>
+                    <ul className={styles.menu} style={{ marginTop: '8px' }}>
+                      <li onClick={() => { setOrderDir('asc'); setSortOpen(false); }}>
+                        По возрастанию ↑
+                      </li>
+                      <li onClick={() => { setOrderDir('desc'); setSortOpen(false); }}>
+                        По убыванию ↓
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 

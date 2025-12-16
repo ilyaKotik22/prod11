@@ -1,37 +1,79 @@
 .menu {
   padding: 20px 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 15px;
+  gap: 20px;
   padding: 0 15px;
+  width: 100%;
+  max-width: 1440px;        /* ограничиваем максимальную ширину контента */
+  margin: 0 auto;           /* центрируем весь грид по горизонтали */
+  box-sizing: border-box;
+  justify-content: center;  /* центрирует колонки, если их меньше, чем помещается */
+}
+
+/* Защита от слишком узких карточек при зуме */
+.grid > * {
+  min-width: 300px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Мобильные адаптации */
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 0 8px;
+  }
+}
+
+/* Все вспомогательные элементы — строго по центру */
+.loader,
+.empty,
+.loaderTrigger,
+.endMessage {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .loader {
-  text-align: center;
   padding: 60px 20px;
   font-size: 18px;
   color: #666;
 }
 
 .empty {
-  text-align: center;
   padding: 80px 20px;
   color: #999;
   font-size: 20px;
 }
 
 .loaderTrigger {
-  text-align: center;
   padding: 40px 20px;
   color: #aaa;
   font-size: 16px;
 }
 
 .endMessage {
-  text-align: center;
   padding: 40px 20px;
   color: #666;
   font-style: italic;
