@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './Navigation.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchApartments } from '../ImmMenu/store/store';
+import { fetchApartments, setDefaultTake } from '../ImmMenu/store/store';
 import { useDebounce } from '../../../shared/debounce/debounce';
 import { useLocation } from 'react-router-dom';
 import type { RootState } from '../../../app/store';
@@ -29,7 +29,7 @@ export const Navigation: React.FC = () => {
   const [realtyType, setRealtyType] = useState<string | undefined>();
   const [bedrooms, setBedrooms] = useState<string | undefined>();
   const [city, setCity] = useState<string | undefined>();
-  const [minPriceRaw, setMinPriceRaw] = useState(100_000);     // исправил на реалистичное значение
+  const [minPriceRaw, setMinPriceRaw] = useState(10_000);     // исправил на реалистичное значение
   const [maxPriceRaw, setMaxPriceRaw] = useState(100_000_000);
 
   const minPrice = useDebounce(minPriceRaw, 400);
@@ -83,7 +83,9 @@ export const Navigation: React.FC = () => {
 
     return query ? `${base}/${path}?${query}` : `${base}/${path}`;
   };
-
+  useEffect(() => {
+    dispatch(setDefaultTake())
+  }, [buyType, realtyType, bedrooms, city, minPrice, maxPrice,])
   useEffect(() => {
     dispatch(fetchApartments(buildUrl()) as any);
   }, [buyType, realtyType, bedrooms, city, minPrice, maxPrice, takeSelector]);
@@ -142,38 +144,7 @@ export const Navigation: React.FC = () => {
           </div>
 
           {/* 2. Тип недвижимости */}
-          <div className={styles.dropdown}>
-            <button className={styles.trigger} onClick={() => setRealtyOpen(v => !v)}>
-              <span>{realtyType || 'Тип недвижимости'}</span>
-              {realtyType && <ResetButton onClick={(e) => { e.stopPropagation(); setRealtyType(undefined); }} />}
-              <span className={styles.arrow}>▼</span>
-            </button>
-            {realtyOpen && (
-              <div className={styles.complexMenu}>
-                <div className={styles.group}>
-                  <h4>Городская</h4>
-                  <ul>
-                    <li onClick={() => { setRealtyType('Квартира в новостройке'); setRealtyOpen(false); }}>
-                      Квартира в новостройке
-                    </li>
-                    <li onClick={() => { setRealtyType('Квартира во вторичке'); setRealtyOpen(false); }}>
-                      Квартира во вторичке
-                    </li>
-                  </ul>
-                </div>
-                <div className={styles.group}>
-                  <h4>Загородная</h4>
-                  <ul>
-                    {['Коттедж', 'Таунхаус', 'Участок'].map(item => (
-                      <li key={item} onClick={() => { setRealtyType(item); setRealtyOpen(false); }}>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            )}
-          </div>
+       
 
           {/* 3. Спальни */}
           <div className={styles.dropdown}>
@@ -219,9 +190,9 @@ export const Navigation: React.FC = () => {
                 <span className={styles.label}>От</span>
                 <input
                   type="range"
-                  min="100000"
-                  max="100000000"
-                  step="1000000"
+                  min="10000"
+                  max="10000000"
+                  step="10000"
                   value={minPriceRaw}
                   onChange={(e) => {
                     const val = Number(e.target.value);
