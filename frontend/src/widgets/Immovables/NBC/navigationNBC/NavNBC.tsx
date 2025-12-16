@@ -130,9 +130,9 @@ export const NavNBC: React.FC = () => {
                 <span className={styles.label}>От</span>
                 <input
                   type="range"
-                  min="1000000"
+                  min="100000"
                   max="100000000"
-                  step="1000000"
+                  step="10000"
                   value={minPriceRaw}
                   onChange={(e) => {
                     const val = Number(e.target.value);

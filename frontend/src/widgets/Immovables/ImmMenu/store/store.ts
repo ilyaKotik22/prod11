@@ -81,6 +81,7 @@ export const apartmentsSlice = createSlice({
     },
     setDefaultTake(state){
       state.take = 12
+      
     },
     setTake(state){
       state.take = state.take + 12
