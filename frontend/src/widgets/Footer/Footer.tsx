@@ -19,11 +19,8 @@ export const Footer: React.FC = () => {
             <nav className={styles.nav}>
               <ul>
                 <li onClick={()=>navigation("/")}>Агентство</li>
-                <li onClick={()=>navigation("/")}><a href="/">Застройщикам</a></li>
-                <li onClick={()=>navigation("/")}><a href="/">Партнёры и клиенты</a></li>
-                <li onClick={()=>navigation("/")}><a href="/">Вакансии</a></li>
-                <li onClick={()=>navigation("/")}><a href="/">Партнёрам</a></li>
-                <li onClick={()=>navigation("/")}> <a href="/">Команда</a></li>
+      
+                <li onClick={()=>navigation("/")}> <a href="/team">Команда</a></li>
               </ul>
             </nav>
           </div>
