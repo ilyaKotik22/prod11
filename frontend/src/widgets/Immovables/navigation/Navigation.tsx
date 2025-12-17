@@ -18,22 +18,18 @@ export const Navigation: React.FC = () => {
   const { pathname } = useLocation();
   const priceWrapperRef = useRef<HTMLDivElement>(null);
 
-  const [buyOpen, setBuyOpen] = useState(false);
-  const [realtyOpen, setRealtyOpen] = useState(false);
-  const [bedroomsOpen, setBedroomsOpen] = useState(false);
-  const [cityOpen, setCityOpen] = useState(false);
-  const [priceSliderOpen, setPriceSliderOpen] = useState(false);
-  const [sortOpen, setSortOpen] = useState(false); // новый дропдаун
+  // Единое состояние для открытого дропдауна
+  type DropdownKey = 'buy' | 'bedrooms' | 'price' | 'city' | 'sort' | null;
+  const [openDropdown, setOpenDropdown] = useState<DropdownKey>(null);
 
   const [buyType, setBuyType] = useState<string | undefined>();
-  const [realtyType, setRealtyType] = useState<string | undefined>();
   const [bedrooms, setBedrooms] = useState<string | undefined>();
   const [city, setCity] = useState<string | undefined>();
   const [minPriceRaw, setMinPriceRaw] = useState(10_000);
   const [maxPriceRaw, setMaxPriceRaw] = useState(100_000_000);
 
-  // Новые состояния для сортировки
-  const [orderBy, setOrderBy] = useState<'price' | 'bedrooms' | undefined>(undefined);
+  // Состояния сортировки (только по цене)
+  const [orderBy, setOrderBy] = useState<string | undefined>(undefined); // 'price' или 'pricePerMonth'
   const [orderDir, setOrderDir] = useState<'asc' | 'desc' | undefined>(undefined);
 
   const minPrice = useDebounce(minPriceRaw, 400);
@@ -49,9 +45,6 @@ export const Navigation: React.FC = () => {
   const getApiPath = (): string => {
     if (buyType === 'Купить') return 'new-building-apartments';
     if (buyType === 'Снять') return 'rental-apartments';
-    if (realtyType && ['Коттедж', 'Таунхаус', 'Участок'].includes(realtyType)) {
-      return 'country-properties';
-    }
     const segment = getLastUrlSegment();
     const map: Record<string, string> = {
       'commercial-properties': 'commercial-properties',
@@ -66,50 +59,44 @@ export const Navigation: React.FC = () => {
 
   const buildUrl = () => {
     const params = new URLSearchParams();
-
     params.set('take', takeSelector.toString());
 
     if (minPrice > 1_000_000) params.set('minPrice', minPrice.toString());
     if (maxPrice < 100_000_000) params.set('maxPrice', maxPrice.toString());
-    if (bedrooms) {
-      params.set('bedrooms', bedrooms === 'Студия' ? '0' : bedrooms);
-    }
-    if (realtyType) params.set('type', realtyType);
+    if (bedrooms) params.set('bedrooms', bedrooms === 'Студия' ? '0' : bedrooms);
     if (buyType) params.set('action', buyType);
     if (city) params.set('city', city);
 
-    // Добавляем сортировку
+    // Сортировка
     if (orderBy) params.set('orderBy', orderBy);
     if (orderDir) params.set('order', orderDir);
 
     const query = params.toString();
     const path = getApiPath();
     const base = import.meta.env.VITE_API_URL;
-    console.log(`${base}/${path}?${query}`)
     return query ? `${base}/${path}?${query}` : `${base}/${path}`;
   };
 
-  // Сброс пагинации при изменении ЛЮБОГО фильтра, включая сортировку
   useEffect(() => {
     dispatch(setDefaultTake());
-  }, [buyType, realtyType, bedrooms, city, minPrice, maxPrice, orderBy, orderDir]);
+  }, [buyType, bedrooms, city, minPrice, maxPrice, orderBy, orderDir]);
 
-  // Загрузка данных
   useEffect(() => {
     dispatch(fetchApartments(buildUrl()) as any);
-  }, [buyType, realtyType, bedrooms, city, minPrice, maxPrice, orderBy, orderDir, takeSelector]);
+  }, [buyType, bedrooms, city, minPrice, maxPrice, orderBy, orderDir, takeSelector]);
 
+  // Закрытие слайдера цены при клике вне
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (priceWrapperRef.current && !priceWrapperRef.current.contains(e.target as Node)) {
-        setPriceSliderOpen(false);
+        setOpenDropdown(null);
       }
     };
-    if (priceSliderOpen) {
+    if (openDropdown === 'price') {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
-  }, [priceSliderOpen]);
+  }, [openDropdown]);
 
   const ResetButton = ({ onClick }: { onClick: () => void }) => (
     <button className={styles.resetCross} onClick={onClick} title="Сбросить">
@@ -130,14 +117,8 @@ export const Navigation: React.FC = () => {
     ? ['Участок', '1', '2', '3', '4', '5', '6', '7', '8']
     : ['Студия', '1', '2', '3', '4', '5', '6', '7', '8'];
 
-  // Отображаемый текст сортировки
-  const sortDisplayText = orderBy
-    ? orderBy === 'price'
-      ? 'Цена'
-      : 'Спальни'
-    : 'Сортировать по';
-
-  const sortDirectionText = orderDir === 'asc' ? '↑ по возрастанию' : orderDir === 'desc' ? '↓ по убыванию' : '';
+  const isRental = pathname.slice(1) === 'rental-apartments';
+  const priceField = isRental ? 'pricePerMonth' : 'price';
 
   return (
     <div className={styles.navigation}>
@@ -145,29 +126,20 @@ export const Navigation: React.FC = () => {
         <h1>{titles[getLastUrlSegment()]}</h1>
 
         <div className={styles.filters}>
-          {/* 1. Купить / Снять */}
-          <div className={styles.dropdown}>
-            <button className={styles.trigger} onClick={() => setBuyOpen(v => !v)}>
-              <span>{buyType || 'Купить / Снять'}</span>
-              {buyType && <ResetButton onClick={(e) => { e.stopPropagation(); setBuyType(undefined); }} />}
-              <span className={styles.arrow}>▼</span>
-            </button>
-            {buyOpen && (
-              <ul className={styles.menu}>
-                <li onClick={() => { setBuyType('Купить'); setBuyOpen(false); }}>Купить</li>
-                <li onClick={() => { setBuyType('Снять'); setBuyOpen(false); }}>Снять</li>
-              </ul>
-            )}
-          </div>
+          {/* Купить / Снять */}
+        
 
-          {/* 3. Спальни */}
+          {/* Спальни */}
           <div className={styles.dropdown}>
-            <button className={styles.trigger} onClick={() => setBedroomsOpen(v => !v)}>
+            <button
+              className={styles.trigger}
+              onClick={() => setOpenDropdown(openDropdown === 'bedrooms' ? null : 'bedrooms')}
+            >
               <span>{displayedBedroomsValue || 'Спальни'}</span>
               {bedrooms && <ResetButton onClick={(e) => { e.stopPropagation(); setBedrooms(undefined); }} />}
               <span className={styles.arrow}>▼</span>
             </button>
-            {bedroomsOpen && (
+            {openDropdown === 'bedrooms' && (
               <ul className={styles.menu}>
                 {bedroomsOptions.map(item => (
                   <li
@@ -175,7 +147,7 @@ export const Navigation: React.FC = () => {
                     onClick={() => {
                       const valueToSave = item === 'Участок' ? 'Студия' : item;
                       setBedrooms(valueToSave);
-                      setBedroomsOpen(false);
+                      setOpenDropdown(null);
                     }}
                   >
                     {item}
@@ -185,21 +157,30 @@ export const Navigation: React.FC = () => {
             )}
           </div>
 
-          {/* 4. Цена */}
+          {/* Цена */}
           <div className={styles.priceSliderWrapper} ref={priceWrapperRef}>
-            <button className={styles.trigger} onClick={() => setPriceSliderOpen(v => !v)}>
+            <button
+              className={styles.trigger}
+              onClick={() => setOpenDropdown(openDropdown === 'price' ? null : 'price')}
+            >
               <span>
                 {minPrice === 5_000_000 && maxPrice === 100_000_000
                   ? 'Цена'
                   : `${formatPrice(minPrice)} – ${formatPrice(maxPrice)} ₽`}
               </span>
               {(minPrice !== 5_000_000 || maxPrice !== 100_000_000) && (
-                <ResetButton onClick={(e) => { e.stopPropagation(); setMinPriceRaw(5_000_000); setMaxPriceRaw(100_000_000); }} />
+                <ResetButton
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMinPriceRaw(5_000_000);
+                    setMaxPriceRaw(100_000_000);
+                  }}
+                />
               )}
               <span className={styles.arrow}>▼</span>
             </button>
 
-            <div className={`${styles.priceSlider} ${priceSliderOpen ? styles.open : ''}`}>
+            <div className={`${styles.priceSlider} ${openDropdown === 'price' ? styles.open : ''}`}>
               <div className={styles.sliderRow}>
                 <span className={styles.label}>От</span>
                 <input
@@ -235,68 +216,80 @@ export const Navigation: React.FC = () => {
             </div>
           </div>
 
-          {/* 5. Город */}
+         
+
+          {/* Сортировка (только по цене) */}
           <div className={styles.dropdown}>
-            <button className={styles.trigger} onClick={() => setCityOpen(v => !v)}>
+            <button
+              className={styles.trigger}
+              onClick={() => setOpenDropdown(openDropdown === 'sort' ? null : 'sort')}
+            >
+              <span>
+                
+                {orderBy ? 'Цена' : 'Сортировать по'}
+                {orderDir && (
+                  <small style={{ marginLeft: '6px', opacity: 0.8 }}>
+                    
+                    {orderDir === 'asc' ? '↑ по возрастанию' : '↓ по убыванию'}
+                  </small>
+                )}
+              </span>
+              {orderBy && (
+                <ResetButton
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOrderBy(undefined);
+                    setOrderDir(undefined);
+                  }}
+                />
+              )}
+              <span className={styles.arrow}>▼</span>
+            </button>
+
+            {openDropdown === 'sort' && (
+              
+              <ul className={styles.menu}>
+                <li
+                  onClick={() => {
+                    setOrderBy(priceField);
+                    setOrderDir('desc');
+                    setOpenDropdown(null);
+                  }}
+                >
+                  цена ↓ 
+                </li>
+                <li
+                  onClick={() => {
+                    setOrderBy(priceField);
+                    setOrderDir('asc');
+                    setOpenDropdown(null);
+                  }}
+                >
+                  цена ↑ 
+                </li>
+              </ul>
+            )}
+          </div>
+           {/* Город */}
+          <div className={styles.dropdown}>
+            <button
+              className={styles.trigger}
+              onClick={() => setOpenDropdown(openDropdown === 'city' ? null : 'city')}
+            >
               <span>{city || 'Город'}</span>
               {city && <ResetButton onClick={(e) => { e.stopPropagation(); setCity(undefined); }} />}
               <span className={styles.arrow}>▼</span>
             </button>
-            {cityOpen && (
+            {openDropdown === 'city' && (
               <ul className={styles.menu}>
                 {['Казань', 'Москва', 'Рязань'].map(item => (
-                  <li key={item} onClick={() => { setCity(item); setCityOpen(false); }}>
+                  <li key={item} onClick={() => { setCity(item); setOpenDropdown(null); }}>
                     {item}
                   </li>
                 ))}
               </ul>
             )}
           </div>
-
-          {/* НОВЫЙ ФИЛЬТР: Сортировка */}
-          <div className={styles.dropdown}>
-            <button className={styles.trigger} onClick={() => setSortOpen(v => !v)}>
-              <span>
-                {sortDisplayText}
-                {orderDir && <small style={{ marginLeft: '6px', opacity: 0.8 }}>{sortDirectionText}</small>}
-              </span>
-              {(orderBy || orderDir) && (
-                <ResetButton onClick={(e) => {
-                  e.stopPropagation();
-                  setOrderBy(undefined);
-                  setOrderDir(undefined);
-                }} />
-              )}
-              <span className={styles.arrow}>▼</span>
-            </button>
-
-            {sortOpen && (
-              <div className={styles.complexMenu} style={{ padding: '12px' }}>
-                <div style={{ marginBottom: '12px' }}>
-                  <strong>Поле сортировки:</strong>
-                  <ul className={styles.menu} style={{ marginTop: '8px' }}>
-                    <li onClick={() => { setOrderBy(pathname ==='rental-apartments' ? 'price' : 'pricePerMonth' ); }}>Цена</li>
-                    <li onClick={() => { setOrderBy('bedrooms'); }}>Спальни</li>
-                  </ul>
-                </div>
-
-                {orderBy && (
-                  <div>
-                    <strong>Направление:</strong>
-                    <ul className={styles.menu} style={{ marginTop: '8px' }}>
-                      <li onClick={() => { setOrderDir('asc'); setSortOpen(false); }}>
-                        По возрастанию ↑
-                      </li>
-                      <li onClick={() => { setOrderDir('desc'); setSortOpen(false); }}>
-                        По убыванию ↓
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
         </div>
       </div>
     </div>

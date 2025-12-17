@@ -41,7 +41,7 @@
   position: absolute; top: calc(100% + 12px); left: 0; right: 0;
   background: #1a1a1c; border: 1px solid rgba(110, 228, 226, 0.3);
   border-radius: 12px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-  z-index: 1000; animation: fadeIn 0.3s ease-out;
+  z-index: 100; animation: fadeIn 0.3s ease-out;
 }
 
 .menu li, .complexMenu li {

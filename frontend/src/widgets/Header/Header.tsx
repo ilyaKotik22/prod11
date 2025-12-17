@@ -49,32 +49,45 @@ export const Header: React.FC = () => {
                         <div className={style.header}>
                             <div className="">+7 (495) 255-01-61</div>
                             <div className="">
-                                <div className="">
+                                <div style={{marginRight: '10px'}} className="">
                                 <img src={watsLogo} alt="watsap" />
                                 </div>
                                 <div className="">
                                 <img src={telegLogo} alt="tg" />
                                 </div>    
                             </div>
+                            <div onClick={()=>setDropDown((ev)=> !ev)} style={{fontSize:'24px',marginLeft:'auto'}} className="">X</div>
                             
                         </div>
                         <div className="">
-                            <div onClick={()=>navigate('/new-building-complexes')} >Новостройки</div>
+                            <div onClick={()=>{
+                                setDropDown((ev)=> !ev)
+                                navigate('/new-building-complexes')}} >Новостройки</div>
                         </div>
                         <div className="">
-                            <div onClick={()=>navigate('/ready-apartments')}>Готовые квартирвы</div>
+                            <div onClick={()=>{
+                                 setDropDown((ev)=> !ev)
+                                navigate('/ready-apartments')}}>Готовые квартирвы</div>
                         </div>
                         <div className="">
-                            <div onClick={()=>navigate('/rental-apartments')} >Арендаквартир</div>
+                            <div onClick={()=>{
+                                setDropDown((ev)=> !ev)
+                                navigate('/rental-apartments')}} >Арендаквартир</div>
                         </div>
                         <div className="">
-                            <div onClick={()=>navigate('/country-properties')} >Загодная</div>
+                            <div onClick={()=>{
+                                 setDropDown((ev)=> !ev)
+                                navigate('/country-properties')}} >Загодная</div>
                         </div>
                         <div className="">
-                            <div onClick={()=>navigate('/commercial-properties')} >Коммерческая</div>
+                            <div onClick={()=>{
+                                 setDropDown((ev)=> !ev)
+                                navigate('/commercial-properties')}} >Коммерческая</div>
                         </div>
                         <div className="">
-                            <div onClick={()=>navigate('/')}>Агенство</div>
+                            <div onClick={()=>{
+                                 setDropDown((ev)=> !ev)
+                                navigate('/')}}>Агенство</div>
                         </div>
                         <div className=""><button onClick={() => setPopupOpen(true)}>Заказать звонок</button></div>
                         
