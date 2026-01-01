@@ -44,27 +44,28 @@ const MapItem: React.FC<MapItemProps> = ({
         <br />
         <div className={styles.mapItem}>
       <MapContainer
-        center={center}
-        zoom={zoom}
-        scrollWheelZoom={false} // удобно в карточках
-        zoomControl={false}     // убираем лишние кнопки для минимализма
-        style={{ height, width: '100%' }}
-        className={styles.mapContainer}
-      >
-        <TileLayer
-          attribution='&copy; OpenStreetMap'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-
-        <Marker position={center}>
-          <Popup offset={[0, -10]}>
-            <div className={styles.popup}>
-              {title && <strong>{title}</strong>}
-              {description && <div className={styles.popupDesc}>{description}</div>}
-            </div>
-          </Popup>
-        </Marker>
-      </MapContainer>
+  center={center}
+  zoom={zoom}
+  scrollWheelZoom={false}
+  zoomControl={false}
+  // ← Вот это главное
+  attributionControl={false}
+  style={{ height, width: '100%' }}
+  className={styles.mapContainer}
+>
+  <TileLayer
+    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  />
+  <Marker position={center}>
+    <Popup offset={[0, -10]}>
+      <div className={styles.popup}>
+        {title && <strong>{title}</strong>}
+        {description && <div className={styles.popupDesc}>{description}</div>}
+      </div>
+    </Popup>
+  </Marker>
+</MapContainer>
     </div>
     </div>
     
